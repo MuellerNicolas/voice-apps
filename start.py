@@ -1,5 +1,6 @@
 from Alarm_Stop_Button.alarm_stop_button import AlarmStopButton
 from Broker.broker import Broker
+from REST_API_Handler.rest_api_handler import RESTApiHandler
 from LED_Clock.led_clock import LEDClock
 from time import sleep
 import traceback
@@ -18,6 +19,9 @@ if __name__ == "__main__":
     # LED Clock
     led_clock = LEDClock(broker, 0, "blue", "red", "yellow")
     thread_objects.append(led_clock)
+    # REST-API-Handler for Home Assistant
+    rest_api_handler = RESTApiHandler('http://192.168.178.21:8123/api/states/input_datetime.alarm_time', 'http://192.168.178.21:8123/api/states/input_boolean.alarm_state')
+    rest_api_handler._httpRequest()
 
     try:
         while(True):
