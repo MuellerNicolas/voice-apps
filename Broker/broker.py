@@ -18,7 +18,7 @@ class Broker:
             self._topics[topic].remove(callback)
 
     # notification to all subscribers about a specific topic
-    def notify(self, topic, *args, **kwargs):
+    def publish(self, topic, *args, **kwargs):
         if not topic in self._topics:
             return
         
