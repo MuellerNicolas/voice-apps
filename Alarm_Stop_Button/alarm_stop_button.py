@@ -30,7 +30,7 @@ class AlarmStopButton(AlarmStopButtonInterface):
                 sleep(self._POLLING)
                 if (gpio.getDigital(self._PIN)) == 1:
                     # notify all interested compontents about the event
-                    self._broker.publish("alarm-button-stop", "pressed")
+                    self._broker.publish('alarm-button-stop', 'pressed')
                     # debouncetime - 1 second: ignore any buttonpress within the next second
                     sleep(1)
         except:
