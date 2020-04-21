@@ -56,5 +56,7 @@ class RESTApiHandler:
         # Convert the responses text to string and deserialize the json
         state = state.json()
         alarm_info["state"] = state["state"]
+        # Send the alarm_info to all subscribers
+        self._broker.publish('alarm-info', alarm_info)
         # Request was successful, stop the thread
         self.close()
