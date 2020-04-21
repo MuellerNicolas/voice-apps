@@ -7,7 +7,6 @@ from time import sleep
 
 class RESTApiHandler:
     def __init__(self, broker):
-        self._broker = broker
         # get the home assistant authorization key
         path = os.path.join(os.path.dirname(__file__), 'Home_Assistant_Authorization.json')
         with open(path) as f:
@@ -20,6 +19,9 @@ class RESTApiHandler:
             "url_time": home_assistant['url_time'],
             "url_state": home_assistant['url_state']
         }
+        # Broker
+        self._broker = broker
+        self._broker.subscribe("alarm-request-info", self._initiate_request_callback)
 
         # Thread
         self._thread_flag = threading.Event()
@@ -60,3 +62,6 @@ class RESTApiHandler:
         self._broker.publish('alarm-info', alarm_info)
         # Request was successful, stop the thread
         self.close()
+
+    def _initiate_request_callback(self):
+        self._thread_flag.set()
