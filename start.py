@@ -20,8 +20,7 @@ if __name__ == "__main__":
     led_clock = LEDClock(broker, 0, "blue", "red", "yellow")
     thread_objects.append(led_clock)
     # REST-API-Handler for Home Assistant
-    rest_api_handler = RESTApiHandler()
-    rest_api_handler._httpRequest()
+    rest_api_handler = RESTApiHandler(broker)
 
     try:
         while(True):
