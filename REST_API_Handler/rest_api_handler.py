@@ -18,7 +18,15 @@ class RESTApiHandler:
         }
 
     def _httpRequest(self):
+        alarm_info = {}
         time = get(self._urls["url_time"], headers = self._headers)
-        print(time.text)
+        # Convert the responses text to string and deserialize the json
+        time = time.json()
+        alarm_info["hour"] = time["attributes"]["hour"]
+        alarm_info["minute"] = time["attributes"]["minute"]
+        alarm_info["second"] = time["attributes"]["second"]
         state = get(self._urls["url_state"], headers = self._headers)
-        print(state.text)
+        # Convert the responses text to string and deserialize the json
+        state = state.json()
+        alarm_info["state"] = state["state"]
+        print(alarm_info)
