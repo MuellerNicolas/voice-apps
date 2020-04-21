@@ -20,7 +20,7 @@ if __name__ == "__main__":
     led_clock = LEDClock(broker, 0, "blue", "red", "yellow")
     thread_objects.append(led_clock)
     # REST-API-Handler for Home Assistant
-    rest_api_handler = RESTApiHandler('http://192.168.178.21:8123/api/states/input_datetime.alarm_time', 'http://192.168.178.21:8123/api/states/input_boolean.alarm_state')
+    rest_api_handler = RESTApiHandler()
     rest_api_handler._httpRequest()
 
     try:
