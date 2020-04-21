@@ -33,6 +33,6 @@ if __name__ == "__main__":
 
     # close / stop all threads
     for thread_object in thread_objects:
-        if hasattr(thread_object, 'stop_thread'):
-            thread_object.stop_thread()
+        if hasattr(thread_object, 'close'):
+            thread_object.close()
     print('Alle Threads beendet!!!')
