@@ -5,6 +5,7 @@ from REST_API_Handler.rest_api_handler import RESTApiHandler
 from LED_Clock.led_clock import LEDClock
 from LED_Alarm_Status.led_alarm_status import LEDAlarmStatus
 from Alarm_Time_Keeper.alarm_time_keeper import AlarmTimeKeeper
+from Alarm_Sound.alarm_sound import AlarmSound
 from time import sleep
 import traceback
 
@@ -17,11 +18,11 @@ if __name__ == "__main__":
 
     # Components
     # Button - stop 
-    #alarm_stop_button = AlarmStopButton(broker, PIN = 1, POLLING = .125)
-    #thread_objects.append(alarm_stop_button)
+    alarm_stop_button = AlarmStopButton(broker, PIN = 1, POLLING = .125)
+    thread_objects.append(alarm_stop_button)
     # Button - switch
-    alarm_switch_button = AlarmSwitchButton(broker, PIN = 1, POLLING = .125)
-    thread_objects.append(alarm_switch_button)
+    # alarm_switch_button = AlarmSwitchButton(broker, PIN = 3, POLLING = .125)
+    # thread_objects.append(alarm_switch_button)
     # LED Clock
     led_clock = LEDClock(broker, 0, "blue", "red", "yellow")
     thread_objects.append(led_clock)
@@ -34,6 +35,10 @@ if __name__ == "__main__":
     # Time Keeper
     alarm_time_keeper = AlarmTimeKeeper(broker)
     thread_objects.append(broker)
+    # Alarm sound
+    alarm_sound = AlarmSound(broker, PIN = 2)
+    thread_objects.append(alarm_sound)
+
     
     try:
         while(True):

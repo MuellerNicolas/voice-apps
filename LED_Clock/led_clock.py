@@ -49,7 +49,7 @@ class LEDClock:
         self._display_time = True
 
 
-    def stop_displaying(self):
+    def stop_displaying(self, *args, **kwargs):
         self._display_time = False
         led.set("black")
 

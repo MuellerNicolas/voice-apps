@@ -38,7 +38,7 @@ class AlarmTimeKeeper:
         except:
             traceback.print_exc()
             # if any error occurs try to wake me up
-            self._broker.publish("alarm-beep")
+            self._alarmClockWakeup()
 
     def _receive_alarm_info_callback(self, alarm_info):
         self._alarm_info = alarm_info
