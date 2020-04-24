@@ -22,6 +22,7 @@ class RESTApiHandler:
         # Broker
         self._broker = broker
         self._broker.subscribe("alarm-request-info", self._initiate_request_callback)
+        self._broker.subscribe("alarm-button-switch", self._set_alarm_state)
 
         # Thread
         self._thread_flag = threading.Event()
@@ -29,7 +30,7 @@ class RESTApiHandler:
         self._thread.start()
 
     def close(self):
-        self._thread_flag.clear()
+        self._thread_flag.set()
 
     def _http_polling(self):
         try:
@@ -38,24 +39,26 @@ class RESTApiHandler:
                 state = self._get_alarm_state()
                 # Check if the request was successful
                 if(time.status_code != 200 or state.status_code != 200):
-                    # not successful, go on threading
+                    # Not successful, go on threading
                     self._thread_flag.set()
                 else:
-                    # successful
+                    # Successful
                     alarm_info = self._format_alarm_info(time, state)
                     # Send the alarm_info to all subscribers
                     self._broker.publish('alarm-info', alarm_info)
                     # Request was successful, stop the thread
-                    self.close()
+                    return
                 sleep(1)
                 self._thread_flag.wait()
         except:
             traceback.print_exc()
+        finally:
             self.close()
 
     def _get_alarm_time(self):
         time = get(self._urls["url_time"], headers = self._headers)
         return time
+
     def _get_alarm_state(self):
         state = get(self._urls["url_state"], headers = self._headers)
         return state
@@ -72,8 +75,28 @@ class RESTApiHandler:
         alarm_info["state"] = state["state"]
         return alarm_info
     
-    def _set_alarm_state(self):
-        pass
+    def _set_alarm_state(self, info):
+        # execute on alarm-switch-button push
+        time = self._get_alarm_time()
+        state = self._get_alarm_state()
+        alarm_info = self._format_alarm_info(time, state)
+        # Switch alarm state
+        if(alarm_info["state"] == "on"):
+            # switch the alarm off
+            state_response = post(self._urls["url_state"], headers = self._headers, json = {"state": "off"})
+            # check successful and give visual feedback
+            if(state_response.status_code != 200):
+                self._broker.publish('alarm-info', 'fail')
+            else:
+                self._broker.publish('alarm-info', 'okay')
+        else:
+            # switch the alarm on
+            state_response = post(self._urls["url_state"], headers = self._headers, json = {"state": "on"})
+            # check successful and give visual feedback
+            if(state_response.status_code != 200):
+                self._broker.publish('alarm-info', 'fail')
+            else:
+                self._broker.publish('alarm-info', 'okay')
 
     def _initiate_request_callback(self):
         self._thread_flag.set()
