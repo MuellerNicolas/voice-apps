@@ -1,4 +1,5 @@
 from Alarm_Stop_Button.alarm_stop_button import AlarmStopButton
+from Alarm_Switch_Button.alarm_switch_button import AlarmSwitchButton
 from Broker.broker import Broker
 from REST_API_Handler.rest_api_handler import RESTApiHandler
 from LED_Clock.led_clock import LEDClock
@@ -15,8 +16,11 @@ if __name__ == "__main__":
 
     # Components
     # Button - stop 
-    alarm_stop_button = AlarmStopButton(broker, 1, .125)
-    thread_objects.append(alarm_stop_button)
+    #alarm_stop_button = AlarmStopButton(broker, 1, .125)
+    #thread_objects.append(alarm_stop_button)
+    # Button - switch
+    alarm_switch_button = AlarmSwitchButton(broker, 1, .125)
+    thread_objects.append(alarm_switch_button)
     # LED Clock
     led_clock = LEDClock(broker, 0, "blue", "red", "yellow")
     thread_objects.append(led_clock)

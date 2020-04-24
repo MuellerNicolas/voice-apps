@@ -1,4 +1,4 @@
-from Alarm_Switch_Button.alarm_switch_button import AlarmSwitchButtonInterface
+from Alarm_Switch_Button.alarm_switch_button_interface import AlarmSwitchButtonInterface
 from matrix_lite import gpio
 from time import sleep
 import threading
