@@ -1,4 +1,4 @@
-from requests import get
+from requests import get, post
 import json
 import os
 import threading
@@ -34,34 +34,46 @@ class RESTApiHandler:
     def _http_polling(self):
         try:
             while True:
-                self._httpRequest()
+                time = self._get_alarm_time()
+                state = self._get_alarm_state()
+                # Check if the request was successful
+                if(time.status_code != 200 or state.status_code != 200):
+                    # not successful, go on threading
+                    self._thread_flag.set()
+                else:
+                    # successful
+                    alarm_info = self._format_alarm_info(time, state)
+                    # Send the alarm_info to all subscribers
+                    self._broker.publish('alarm-info', alarm_info)
+                    # Request was successful, stop the thread
+                    self.close()
                 sleep(1)
                 self._thread_flag.wait()
         except:
             traceback.print_exc()
             self.close()
 
-    def _httpRequest(self):
-        alarm_info = {}
+    def _get_alarm_time(self):
         time = get(self._urls["url_time"], headers = self._headers)
-        # Check if it was successful
-        if(time.status_code != 200):
-            # not successful, go on threading
-            self._thread_flag.set()
-            return
+        return time
+    def _get_alarm_state(self):
+        state = get(self._urls["url_state"], headers = self._headers)
+        return state
+
+    def _format_alarm_info(self, time, state):
+        alarm_info = {}
         # Convert the responses text to string and deserialize the json
         time = time.json()
         alarm_info["hour"] = time["attributes"]["hour"]
         alarm_info["minute"] = time["attributes"]["minute"]
         alarm_info["second"] = time["attributes"]["second"]
-        state = get(self._urls["url_state"], headers = self._headers)
         # Convert the responses text to string and deserialize the json
         state = state.json()
         alarm_info["state"] = state["state"]
-        # Send the alarm_info to all subscribers
-        self._broker.publish('alarm-info', alarm_info)
-        # Request was successful, stop the thread
-        self.close()
+        return alarm_info
+    
+    def _set_alarm_state(self):
+        pass
 
     def _initiate_request_callback(self):
         self._thread_flag.set()
