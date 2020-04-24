@@ -14,7 +14,7 @@ if __name__ == "__main__":
     broker = Broker()
 
     # Components
-    # Button
+    # Button - stop 
     alarm_stop_button = AlarmStopButton(broker, 1, .125)
     thread_objects.append(alarm_stop_button)
     # LED Clock
