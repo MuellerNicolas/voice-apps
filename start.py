@@ -3,6 +3,7 @@ from Alarm_Switch_Button.alarm_switch_button import AlarmSwitchButton
 from Broker.broker import Broker
 from REST_API_Handler.rest_api_handler import RESTApiHandler
 from LED_Clock.led_clock import LEDClock
+from LED_Alarm_Status.led_alarm_status import LEDAlarmStatus
 from Alarm_Time_Keeper.alarm_time_keeper import AlarmTimeKeeper
 from time import sleep
 import traceback
@@ -24,6 +25,9 @@ if __name__ == "__main__":
     # LED Clock
     led_clock = LEDClock(broker, 0, "blue", "red", "yellow")
     thread_objects.append(led_clock)
+    # LED alarm status on switch
+    led_alarm_status = LEDAlarmStatus(broker)
+    thread_objects.append(led_alarm_status)
     # REST-API-Handler for Home Assistant
     rest_api_handler = RESTApiHandler(broker)
     thread_objects.append(rest_api_handler)

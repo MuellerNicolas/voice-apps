@@ -88,9 +88,9 @@ class RESTApiHandler:
             alarm_info = self._format_alarm_info(time, state_response)
             # check successful and give visual feedback
             if(state_response.status_code != 200):
-                self._broker.publish('alarm-info', 'fail')
+                self._broker.publish('alarm-switch-led', 'fail')
             else:
-                self._broker.publish('alarm-info', 'okay')
+                self._broker.publish('alarm-switch-led', 'off')
                 # send the new alarm info to the time keeper
                 self._broker.publish('alarm-info', alarm_info)
         else:
@@ -100,9 +100,9 @@ class RESTApiHandler:
             alarm_info = self._format_alarm_info(time, state_response)
             # check successful and give visual feedback
             if(state_response.status_code != 200):
-                self._broker.publish('alarm-info', 'fail')
+                self._broker.publish('alarm-switch-led', 'fail')
             else:
-                self._broker.publish('alarm-info', 'okay')
+                self._broker.publish('alarm-switch-led', 'on')
                 # send the new alarm info to the time keeper
                 self._broker.publish('alarm-info', alarm_info)
 

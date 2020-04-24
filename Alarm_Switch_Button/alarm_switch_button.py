@@ -32,8 +32,11 @@ class AlarmSwitchButton(AlarmSwitchButtonInterface):
                 if (gpio.getDigital(self._PIN)) == 1:
                     # notify all interested compontents about the event
                     self._triggered()                    
-                    # debouncetime - 1 second: ignore any buttonpress within the next second
-                    sleep(1)
+                    # debouncetime - 4 second: ignore any buttonpress within the next second
+                    # set to 4 seconds, because the leds will last 4 seconds
+                    # otherwise multiple presses after one another will cause a strange
+                    # led effect
+                    sleep(4)
         except:
             traceback.print_exc()
 
