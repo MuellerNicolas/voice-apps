@@ -13,7 +13,7 @@ class AlarmSound:
         # flag to stop the sound
         self._continue_beep = True
         # flag for timeout if the buzzer is already active
-        self._buzzer_active = False
+        self._last_minute_active = False
         self._PIN = PIN
     def _run(self):
         self._thread_buzzer_flag = threading.Event()
@@ -28,26 +28,31 @@ class AlarmSound:
         gpio.setDigital(self._PIN, 'OFF')
 
     def _melody(self):
-        if(self._buzzer_active == False):
+        try:
+            gpio.setFunction(self._PIN, 'DIGITAL')
+            gpio.setMode(self._PIN, 'output')
+            while self._continue_beep:
+                gpio.setDigital(self._PIN, 'ON')
+                sleep(1)
+                gpio.setDigital(self._PIN, 'OFF')
+                sleep(1)
+        except:
+            traceback.print_exc()
+        finally:
+            # Reset the beep flag
+            self._continue_beep = True
+            gpio.setDigital(self._PIN, 'OFF')
+
+    def _beep(self):
+        if(self._last_minute_active == False):
+            self._run()
+            self._last_minute_active = True
             try:
-                self._buzzer_active = True
-                gpio.setFunction(self._PIN, 'DIGITAL')
-                gpio.setMode(self._PIN, 'output')
-                while self._continue_beep:
-                    gpio.setDigital(self._PIN, 'ON')
-                    sleep(1)
-                    gpio.setDigital(self._PIN, 'OFF')
-                    sleep(1)
+                sleep(60)
             except:
                 traceback.print_exc()
             finally:
-                # Reset the beep / buzzer flag
-                self._continue_beep = True
-                self._buzzer_active = False
-                gpio.setDigital(self._PIN, 'OFF')
-
-    def _beep(self):
-        self._run()
+                self._last_minute_active = False
 
 
     def _stopAlarm(self, *args, **kwargs):
