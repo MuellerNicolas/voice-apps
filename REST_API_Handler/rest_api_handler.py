@@ -84,19 +84,27 @@ class RESTApiHandler:
         if(alarm_info["state"] == "on"):
             # switch the alarm off
             state_response = post(self._urls["url_state"], headers = self._headers, json = {"state": "off"})
+            # update the dictionary sent to the timekeeper
+            alarm_info = self._format_alarm_info(time, state_response)
             # check successful and give visual feedback
             if(state_response.status_code != 200):
                 self._broker.publish('alarm-info', 'fail')
             else:
                 self._broker.publish('alarm-info', 'okay')
+                # send the new alarm info to the time keeper
+                self._broker.publish('alarm-info', alarm_info)
         else:
             # switch the alarm on
             state_response = post(self._urls["url_state"], headers = self._headers, json = {"state": "on"})
+            # update the dictionary sent to the timekeeper
+            alarm_info = self._format_alarm_info(time, state_response)
             # check successful and give visual feedback
             if(state_response.status_code != 200):
                 self._broker.publish('alarm-info', 'fail')
             else:
                 self._broker.publish('alarm-info', 'okay')
+                # send the new alarm info to the time keeper
+                self._broker.publish('alarm-info', alarm_info)
 
     def _initiate_request_callback(self):
         self._thread_flag.set()
