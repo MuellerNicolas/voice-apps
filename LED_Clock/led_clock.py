@@ -12,6 +12,7 @@ class LEDClock:
         # add broker
         self._broker = broker
         self._broker.subscribe('alarm-button-stop', self._active_callback)
+        self._broker.subscribe('alarm-switch-led', self.stop_displaying)
         # stop button already pressed
         self._stop_button_pressed = False
         # offset depending on the rotation off the materix voice module

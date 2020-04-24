@@ -17,10 +17,10 @@ if __name__ == "__main__":
 
     # Components
     # Button - stop 
-    #alarm_stop_button = AlarmStopButton(broker, 1, .125)
+    #alarm_stop_button = AlarmStopButton(broker, PIN = 1, POLLING = .125)
     #thread_objects.append(alarm_stop_button)
     # Button - switch
-    alarm_switch_button = AlarmSwitchButton(broker, 1, .125)
+    alarm_switch_button = AlarmSwitchButton(broker, PIN = 1, POLLING = .125)
     thread_objects.append(alarm_switch_button)
     # LED Clock
     led_clock = LEDClock(broker, 0, "blue", "red", "yellow")
