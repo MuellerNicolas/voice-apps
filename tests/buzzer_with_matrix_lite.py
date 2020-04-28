@@ -239,35 +239,64 @@ adventure_time_tempo = [
   ]
 
 
-star_wars_melody = [ 
-					notes['G4'], notes['G4'], notes['G4'], 
-					notes['EB4'], 0, notes['BB4'], notes['G4'], 
-					notes['EB4'], 0, notes['BB4'], notes['G4'], 0,
-					
-					notes['D4'], notes['D4'], notes['D4'], 
-					notes['EB4'], 0, notes['BB3'], notes['FS3'],
+star_wars_melody_deeper = [ 
+					notes['G3'], notes['G3'], notes['G3'], 
+					notes['EB3'], 0, notes['BB3'], notes['G3'], 
 					notes['EB3'], 0, notes['BB3'], notes['G3'], 0,
 					
-					notes['G4'], 0, notes['G3'], notes['G3'], 0,
-					notes['G4'], 0, notes['FS4'], notes['F4'], 
-					notes['E4'], notes['EB4'], notes['E4'], 0,
-					notes['GS3'], notes['CS3'], 0, 
+					notes['D3'], notes['D3'], notes['D3'], 
+					notes['EB3'], 0, notes['BB2'], notes['FS2'],
+					notes['EB2'], 0, notes['BB2'], notes['G3'], 0,
 					
-					notes['C3'], notes['B3'], notes['BB3'], notes['A3'], notes['BB3'], 0,
-					notes['EB3'], notes['FS3'], notes['EB3'], notes['FS3'], 
-					notes['BB3'], 0, notes['G3'], notes['BB3'], notes['D4'], 0,
+					notes['G3'], 0, notes['G2'], notes['G2'], 0,
+					notes['G3'], 0, notes['FS3'], notes['F3'], 
+					notes['E3'], notes['EB3'], notes['E3'], 0,
+					notes['GS2'], notes['CS2'], 0, 
+					
+					notes['C2'], notes['B2'], notes['BB2'], notes['A2'], notes['BB2'], 0,
+					notes['EB2'], notes['FS2'], notes['EB2'], notes['FS2'], 
+					notes['BB2'], 0, notes['G2'], notes['BB2'], notes['D3'], 0,
 					
 					
-					notes['G4'], 0, notes['G3'], notes['G3'], 0,
-					notes['G4'], 0, notes['FS4'], notes['F4'], 
-					notes['E4'], notes['EB4'], notes['E4'], 0,
-					notes['GS3'], notes['CS3'], 0, 
+					notes['G3'], 0, notes['G2'], notes['G2'], 0,
+					notes['G3'], 0, notes['FS3'], notes['F3'], 
+					notes['E3'], notes['EB3'], notes['E3'], 0,
+					notes['GS2'], notes['CS2'], 0, 
 					
-					notes['C3'], notes['B3'], notes['BB3'], notes['A3'], notes['BB3'], 0,
+					notes['C2'], notes['B2'], notes['BB2'], notes['A2'], notes['BB2'], 0,
 					
-					notes['EB3'], notes['FS3'], notes['EB3'],  
-					notes['BB3'], notes['G3'], notes['EB3'], 0, notes['BB3'], notes['G3'],
+					notes['EB2'], notes['FS2'], notes['EB2'],  
+					notes['BB2'], notes['G2'], notes['EB2'], 0, notes['BB2'], notes['G2'],
 					]
+star_wars_melody = [ 
+								notes['G4'], notes['G4'], notes['G4'], 
+								notes['EB4'], 0, notes['BB4'], notes['G4'], 
+								notes['EB4'], 0, notes['BB4'], notes['G4'], 0,
+								
+								notes['D4'], notes['D4'], notes['D4'], 
+								notes['EB4'], 0, notes['BB3'], notes['FS3'],
+								notes['EB3'], 0, notes['BB3'], notes['G3'], 0,
+								
+								notes['G4'], 0, notes['G3'], notes['G3'], 0,
+								notes['G4'], 0, notes['FS4'], notes['F4'], 
+								notes['E4'], notes['EB4'], notes['E4'], 0,
+								notes['GS3'], notes['CS3'], 0, 
+								
+								notes['C3'], notes['B3'], notes['BB3'], notes['A3'], notes['BB3'], 0,
+								notes['EB3'], notes['FS3'], notes['EB3'], notes['FS3'], 
+								notes['BB3'], 0, notes['G3'], notes['BB3'], notes['D4'], 0,
+								
+								
+								notes['G4'], 0, notes['G3'], notes['G3'], 0,
+								notes['G4'], 0, notes['FS4'], notes['F4'], 
+								notes['E4'], notes['EB4'], notes['E4'], 0,
+								notes['GS3'], notes['CS3'], 0, 
+								
+								notes['C3'], notes['B3'], notes['BB3'], notes['A3'], notes['BB3'], 0,
+								
+								notes['EB3'], notes['FS3'], notes['EB3'],  
+								notes['BB3'], notes['G3'], notes['EB3'], 0, notes['BB3'], notes['G3'],
+								]
 
 
 star_wars_tempo = [
@@ -637,12 +666,13 @@ if __name__ == '__main__':		# Program start from here
 		#time.sleep(2)
 		#print("Star Wars Theme")
 		#play(star_wars_melody, star_wars_tempo, 0.50, 1.000)
+		play(star_wars_melody_deeper, star_wars_tempo, 0.50, 1.000)
 		#time.sleep(2)
-		print("Super Mario Theme")
-		play(melody, tempo, 1.3, 0.800)
+		#print("Super Mario Theme")
+		#play(melody, tempo, 1.3, 0.800)
 		#time.sleep(2)
 		#print("Super Mario Underworld Theme")
-		play(underworld_melody, underworld_tempo, 1.3, 0.800)
+		#play(underworld_melody, underworld_tempo, 1.3, 0.800)
 		#time.sleep(2)
 		#print("Adventure Time Theme")
 		#play(adventure_time_melody, adventure_time_tempo, 1.3, 1.500)
