@@ -6,6 +6,7 @@ from LED_Clock.led_clock import LEDClock
 from LED_Alarm_Status.led_alarm_status import LEDAlarmStatus
 from Alarm_Time_Keeper.alarm_time_keeper import AlarmTimeKeeper
 from Alarm_Sound.alarm_sound import AlarmSound
+from MQTT_Handler.voice_mqtt_handler import MQTTHandler
 from time import sleep
 import traceback
 
@@ -38,6 +39,9 @@ if __name__ == "__main__":
     # Alarm sound
     alarm_sound = AlarmSound(broker, PIN = 2)
     thread_objects.append(alarm_sound)
+    # MQTT
+    mqtt_handler = MQTTHandler(broker)
+    thread_objects.append(mqtt_handler)
 
     
     try:
