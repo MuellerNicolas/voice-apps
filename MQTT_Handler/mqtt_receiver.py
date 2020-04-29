@@ -19,13 +19,8 @@ class MQTTReceiver(mqtt.Client):
         if(msg_test[0] == 'b'):
             # decode byte to utf-8
             msg.payload = msg.payload.decode("utf-8")
-        
-        # loaded means the wakeword was detected
-        if(msg.payload == 'loaded'):
-            color = 'blue'
-        else:
-            color = 'black'
-        self._broker.publish('wakeword-start', color)
+        # payload possibilities payload and the opposite
+        self._broker.publish('wakeword-start', msg.payload)
     
     def run(self):
         self.connect(self._ip_adress, self._port)

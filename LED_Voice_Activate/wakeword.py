@@ -8,7 +8,12 @@ class LEDClock:
         self._broker.subscribe('wakeword-start', self._set_lightring)
         self._broker.subscribe('wakeword-stop', self._set_lightring)
 
-    def _set_lightring(self, color):
+    def _set_lightring(self, payload):
+        if(payload == 'loaded'):
+            color = 'blue'
+        else:
+            color = 'black'
+
         everloop = ['black'] * led.length
     
         ledLength = led.length

@@ -15,6 +15,8 @@ class MQTTHandler:
             mqtt_settings = json.load(f)
         self._ip = mqtt_settings["ip"]
         self._port = mqtt_settings["port"]
+
+        # mqtt receiver for wakeword detection
         self._mqtt_receiver = MQTTReceiver(self._broker, self._ip, self._port)
         self._setup()
 
