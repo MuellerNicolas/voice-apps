@@ -2,9 +2,10 @@ import threading
 from matrix_lite import gpio
 from time import sleep
 import traceback
+from Alarm_Sound.alarm_song import BuzzerSong
 
 class AlarmSound:
-    def __init__(self, broker, PIN):
+    def __init__(self, broker, PIN_SONG, PIN_BEEP):
         self.broker = broker
         broker.subscribe("alarm-beep", self._beep)
         # stop the alarm on analog button press
@@ -17,7 +18,8 @@ class AlarmSound:
         self._continue_beep = True
         # flag for timeout if the buzzer is already active
         self._last_minute_active = False
-        self._PIN = PIN
+        self._PIN_SONG = PIN_SONG
+        self._PIN_BEEP = PIN_BEEP
 
     def _run(self):
         self._thread_buzzer_flag = threading.Event()
@@ -29,28 +31,41 @@ class AlarmSound:
             self._thread_buzzer_flag.set()
         self._continue_beep = False
         # Make sure there is no power on the pin after closing
-        gpio.setDigital(self._PIN, 'OFF')
+        gpio.setDigital(self._PIN_BEEP, 'OFF')
+        gpio.setDigital(self._PIN_SONG, 'OFF')
 
     def _melody(self):
         try:
-            gpio.setFunction(self._PIN, 'DIGITAL')
-            gpio.setMode(self._PIN, 'output')
+            # quiet song
+            buzzer_song = BuzzerSong(self._PIN_SONG)
+            buzzer_song.setup()
+            buzzer_song.playStarWars()
+            buzzer_song.close()
+            # loud beeping
+            gpio.setFunction(self._PIN_BEEP, 'DIGITAL')
+            gpio.setMode(self._PIN_BEEP, 'output')
             while self._continue_beep:
-                gpio.setDigital(self._PIN, 'ON')
+                gpio.setDigital(self._PIN_BEEP, 'ON')
                 sleep(1)
-                gpio.setDigital(self._PIN, 'OFF')
+                gpio.setDigital(self._PIN_BEEP, 'OFF')
                 sleep(1)
         except:
             traceback.print_exc()
         finally:
             # Reset the beep flag
             self._continue_beep = True
-            gpio.setDigital(self._PIN, 'OFF')
+            gpio.setDigital(self._PIN_BEEP, 'OFF')
+            gpio.setDigital(self._PIN_SONG, 'OFF')
 
-    def _beep(self):
+    def _beep(self, *args, **kwargs):
         if(self._last_minute_active == False):
+            # start beeping
             self._run()
             self._last_minute_active = True
+            """stop any request to start beeping for the next minute
+               this is because the time keeper would send the whole 
+               minute in 15 second intervals new command
+            """
             try:
                 sleep(60)
             except:

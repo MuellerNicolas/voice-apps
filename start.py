@@ -44,7 +44,7 @@ if __name__ == "__main__":
     alarm_time_keeper = AlarmTimeKeeper(broker)
     thread_objects.append(broker)
     # Alarm sound
-    alarm_sound = AlarmSound(broker, PIN = 4)
+    alarm_sound = AlarmSound(broker, PIN_SONG = 4, PIN_BEEP = 2)
     thread_objects.append(alarm_sound)
 
     
