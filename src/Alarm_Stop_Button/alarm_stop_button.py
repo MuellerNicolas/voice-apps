@@ -1,8 +1,12 @@
-from Alarm_Stop_Button.alarm_stop_button_interface import AlarmStopButtonInterface
-from matrix_lite import gpio
-from time import sleep
 import threading
 import traceback
+from time import sleep
+
+from matrix_lite import gpio
+
+from Alarm_Stop_Button.alarm_stop_button_interface import \
+    AlarmStopButtonInterface
+
 
 class AlarmStopButton(AlarmStopButtonInterface):
     def __init__(self, broker, PIN, POLLING):
@@ -13,9 +17,10 @@ class AlarmStopButton(AlarmStopButtonInterface):
         # setup matrix voice pins
         gpio.setFunction(self._PIN, 'DIGITAL')
         gpio.setMode(self._PIN, 'input')
-        #thread for polling to press events on the button
+        # thread for polling to press events on the button
         self._thread_button_flag = threading.Event()
-        self._thread_button = threading.Thread(target= self._check_pressed, name = 'voice-app-alarm-stop-button', daemon = True)
+        self._thread_button = threading.Thread(
+            target=self._check_pressed, name='voice-app-alarm-stop-button', daemon=True)
         self._thread_button.start()
 
     def close(self):
@@ -36,4 +41,3 @@ class AlarmStopButton(AlarmStopButtonInterface):
                     sleep(1)
         except:
             traceback.print_exc()
-

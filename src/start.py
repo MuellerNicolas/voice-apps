@@ -1,15 +1,16 @@
+import traceback
+from time import sleep
+
+from Alarm_Sound.alarm_sound import AlarmSound
 from Alarm_Stop_Button.alarm_stop_button import AlarmStopButton
 from Alarm_Switch_Button.alarm_switch_button import AlarmSwitchButton
-from Broker.broker import Broker
-from REST_API_Handler.rest_api_handler import RESTApiHandler
-from LED_Clock.led_clock import LEDClock
-from LED_Alarm_Status.led_alarm_status import LEDAlarmStatus
 from Alarm_Time_Keeper.alarm_time_keeper import AlarmTimeKeeper
-from Alarm_Sound.alarm_sound import AlarmSound
+from Broker.broker import Broker
+from LED_Alarm_Status.led_alarm_status import LEDAlarmStatus
+from LED_Clock.led_clock import LEDClock
+from LED_Voice_Activate.wakeword import Wakeword
 from MQTT_Handler.mqtt_receiver import MQTTReceiver
-from LED_Voice_Activate.wakeword import Wakeword 
-from time import sleep
-import traceback
+from REST_API_Handler.rest_api_handler import RESTApiHandler
 
 if __name__ == "__main__":
     # array with all used components

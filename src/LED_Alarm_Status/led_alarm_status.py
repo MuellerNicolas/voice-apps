@@ -1,5 +1,7 @@
-from matrix_lite import led
 from time import sleep
+
+from matrix_lite import led
+
 
 class LEDAlarmStatus:
     def __init__(self, broker):

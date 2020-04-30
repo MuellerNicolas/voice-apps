@@ -1,21 +1,23 @@
-from time import sleep
-from datetime import datetime
 import threading
-from threading import Lock
 import traceback
+from datetime import datetime
+from threading import Lock
+from time import sleep
+
 
 class AlarmTimeKeeper:
     def __init__(self, broker):
         # Broker
         self._broker = broker
-        self._broker.subscribe('alarm-info' , self._receive_alarm_info_callback)
+        self._broker.subscribe('alarm-info', self._receive_alarm_info_callback)
 
         # alarm info dictionary
         self._alarm_info = None
-        
+
         # Thread
         self._thread_flag = threading.Event()
-        self._thread = threading.Thread(target= self._time_polling, name = 'Time-Keeper-Thread', daemon = True)
+        self._thread = threading.Thread(
+            target=self._time_polling, name='Time-Keeper-Thread', daemon=True)
         self._thread.start()
 
     def close(self):

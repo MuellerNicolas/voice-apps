@@ -1,6 +1,8 @@
-from matrix_lite import led
-from time import sleep
 from math import trunc
+from time import sleep
+
+from matrix_lite import led
+
 
 class Wakeword:
     def __init__(self, broker):
@@ -25,7 +27,7 @@ class Wakeword:
 
     def _set_lightring(self, color):
         everloop = ['black'] * led.length
-    
+
         ledLength = led.length
 
         for i in range(trunc(ledLength/2)):

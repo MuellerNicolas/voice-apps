@@ -1,6 +1,5 @@
 import threading
 
-#  Orientierung an dem in "Entwicklung eines IoT-Devices" gezeigten Entwurfsmuster Publish-Subscribe
 
 class Broker:
     def __init__(self):
@@ -22,7 +21,8 @@ class Broker:
     def publish(self, topic, *args, **kwargs):
         if not topic in self._topics:
             return
-        
+
         for callback in self._topics[topic]:
-            notify_thread = threading.Thread(target = callback, args = args, kwargs = kwargs, name = "app-broker-thread")
+            notify_thread = threading.Thread(
+                target=callback, args=args, kwargs=kwargs, name="app-broker-thread")
             notify_thread.start()

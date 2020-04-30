@@ -44,9 +44,10 @@
 #---------------------------------------------------
 
 import time
-from matrix_lite import gpio
-from time import sleep
 import traceback
+from time import sleep
+
+from matrix_lite import gpio
 
 notes = {
 	'B0' : 31,

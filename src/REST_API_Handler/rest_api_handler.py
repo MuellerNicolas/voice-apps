@@ -1,9 +1,11 @@
-from requests import get, post
 import json
 import os
 import threading
 import traceback
 from time import sleep
+
+from requests import get, post
+
 
 class RESTApiHandler:
     def __init__(self, broker):

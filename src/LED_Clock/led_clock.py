@@ -1,11 +1,13 @@
 # forked from https://github.com/MuellerNicolas/Matrix-Voice-Clock
 
-from matrix_lite import led
-from time import sleep
-from datetime import datetime
 import threading
-from threading import Lock
+from datetime import datetime
 from math import ceil
+from threading import Lock
+from time import sleep
+
+from matrix_lite import led
+
 
 class LEDClock:
     def __init__(self, broker, offset, hour_color, minute_color, same_color):
@@ -28,9 +30,10 @@ class LEDClock:
 
         # Thread
         self._thread_flag = threading.Event()
-        self._thread = threading.Thread(target= self._trigger_time, name = 'clock_thread', daemon = True)
+        self._thread = threading.Thread(
+            target=self._trigger_time, name='clock_thread', daemon=True)
         self._thread.start()
-    
+
     def _active_callback(self, pressed):
         # Make sure, that the button is not pressed multiple times and deactivates for each time
         if(self._stop_button_pressed == False):
@@ -40,7 +43,7 @@ class LEDClock:
             # time period of displaying
             sleep(10)
             self.stop_displaying()
-            self._stop_button_pressed = False   
+            self._stop_button_pressed = False
             self._broker.publish('clock-time', 'stop')
 
     def close(self):
@@ -49,7 +52,6 @@ class LEDClock:
 
     def display_time(self):
         self._display_time = True
-
 
     def stop_displaying(self, *args, **kwargs):
         self._display_time = False
@@ -121,38 +123,38 @@ class LEDClock:
     def _odd(self, number, offset):
         if (self._hours_set):
             # -1 cuz array
-            if(self._led_array[(number+offset-1)%18] == self.hour_color):
-                self._led_array[(number+offset-1)%18] = self.same_color
+            if(self._led_array[(number+offset-1) % 18] == self.hour_color):
+                self._led_array[(number+offset-1) % 18] = self.same_color
             else:
-                self._led_array[(number+offset-1)%18] = self.minute_color
+                self._led_array[(number+offset-1) % 18] = self.minute_color
         else:
-            self._led_array[(number+offset-1)%18] = self.hour_color
-    
+            self._led_array[(number+offset-1) % 18] = self.hour_color
+
     def _even(self, number, offset):
         if (self._hours_set):
             # -1 cuz array
-            if(self._led_array[(number+offset-1)%18] == self.hour_color):
-                self._led_array[(number+offset-1)%18] = self.same_color
-                self._led_array[(number+offset)%18] = self.same_color
+            if(self._led_array[(number+offset-1) % 18] == self.hour_color):
+                self._led_array[(number+offset-1) % 18] = self.same_color
+                self._led_array[(number+offset) % 18] = self.same_color
             else:
-                self._led_array[(number+offset-1)%18] = self.minute_color
-                self._led_array[(number+offset)%18] = self.minute_color
+                self._led_array[(number+offset-1) % 18] = self.minute_color
+                self._led_array[(number+offset) % 18] = self.minute_color
         else:
-            self._led_array[(number+offset-1)%18] = self.hour_color
-            self._led_array[(number+offset)%18] = self.hour_color
+            self._led_array[(number+offset-1) % 18] = self.hour_color
+            self._led_array[(number+offset) % 18] = self.hour_color
 
     def _twelve(self, offset):
         if (self._hours_set):
             # -1 cuz array
-            if(self._led_array[(18+offset-1)%18] == self.hour_color):
-                self._led_array[(18+offset-1)%18] = self.same_color
-                self._led_array[(0+offset)%18] = self.same_color
+            if(self._led_array[(18+offset-1) % 18] == self.hour_color):
+                self._led_array[(18+offset-1) % 18] = self.same_color
+                self._led_array[(0+offset) % 18] = self.same_color
             else:
-                self._led_array[(18+offset-1)%18] = self.minute_color
-                self._led_array[(0+offset)%18] = self.minute_color
+                self._led_array[(18+offset-1) % 18] = self.minute_color
+                self._led_array[(0+offset) % 18] = self.minute_color
         else:
-            self._led_array[(18+offset-1)%18] = self.hour_color
-            self._led_array[(0+offset)%18] = self.hour_color
+            self._led_array[(18+offset-1) % 18] = self.hour_color
+            self._led_array[(0+offset) % 18] = self.hour_color
 
     def set_all_colors(self, hour_color, minute_color, same_color):
         if(hour_color != minute_color and minute_color != same_color and hour_color != same_color):
@@ -164,7 +166,7 @@ class LEDClock:
     def set_hour_color(self, hour_color):
         if(hour_color != self.minute_color and hour_color != self.same_color):
             self.hour_color = hour_color
-            
+
     def set_minute_color(self, minute_color):
         if(minute_color != self.minute_color and minute_color != self.same_color):
             self.minute_color = minute_color

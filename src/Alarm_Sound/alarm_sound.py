@@ -1,8 +1,11 @@
 import threading
-from matrix_lite import gpio
-from time import sleep
 import traceback
+from time import sleep
+
+from matrix_lite import gpio
+
 from Alarm_Sound.alarm_song import BuzzerSong
+
 
 class AlarmSound:
     def __init__(self, broker, PIN_SONG, PIN_BEEP):
@@ -23,7 +26,8 @@ class AlarmSound:
 
     def _run(self):
         self._thread_buzzer_flag = threading.Event()
-        self._thread_buzzer = threading.Thread(target= self._melody, name = 'voice-app-alarm-sound-thread', daemon = True)
+        self._thread_buzzer = threading.Thread(
+            target=self._melody, name='voice-app-alarm-sound-thread', daemon=True)
         self._thread_buzzer.start()
 
     def close(self):
@@ -72,7 +76,6 @@ class AlarmSound:
                 traceback.print_exc()
             finally:
                 self._last_minute_active = False
-
 
     def _stopAlarm(self, *args, **kwargs):
         self.close()
