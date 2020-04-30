@@ -3,7 +3,7 @@ Actions triggered by intends, received via MQTT and HTTP. Therefore the applicat
 
 ## Current Apps
 - Alarm Clock
-- Activating LEDs by speech
+- Enables LEDs by speech
 
 ## Dependencies
 - Listening to Rhasspy's (Voice Assistant) MQTT commands
