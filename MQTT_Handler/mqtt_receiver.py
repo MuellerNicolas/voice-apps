@@ -19,9 +19,11 @@ class MQTTReceiver(mqtt.Client):
         if(msg_test[0] == 'b'):
             # decode byte to utf-8
             msg.payload = msg.payload.decode("utf-8")
-        # payload possibilities payload and the opposite
-        self._broker.publish('wakeword-start', msg.payload)
-    
+        # payload possibilities: loaded and the opposite: listening
+        print('publsihing')
+        print(msg.payload)
+        self._broker.publish('wakeword-status', msg.payload)
+
     def run(self):
         self.connect(self._ip_adress, self._port)
         # Subscribe to all topics
