@@ -121,6 +121,10 @@ notes = {
 class BuzzerSong:
     def __init__(self, buzzer_pin):
         self._buzzer_pin = buzzer_pin
+        self._stop_flag = False
+
+    def set_stop_flag(self):
+        self._stop_flag = True
 
     def buzz(self, frequency, length):	 #create the function "buzz" and feed it the pitch and duration)
 
@@ -147,7 +151,8 @@ class BuzzerSong:
     def play(self, melody,tempo,pause,pace=0.800):
         
         for i in range(0, len(melody)):		# Play song
-            
+            if self._stop_flag:
+                return
             noteDuration = pace/tempo[i]
             self.buzz(melody[i],noteDuration)	# Change the frequency along the song note
             

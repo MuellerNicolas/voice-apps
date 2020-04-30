@@ -23,6 +23,7 @@ class AlarmSound:
         self._last_minute_active = False
         self._PIN_SONG = PIN_SONG
         self._PIN_BEEP = PIN_BEEP
+        self._buzzer_song = None
 
     def _run(self):
         self._thread_buzzer_flag = threading.Event()
@@ -41,10 +42,11 @@ class AlarmSound:
     def _melody(self):
         try:
             # quiet song
-            buzzer_song = BuzzerSong(self._PIN_SONG)
-            buzzer_song.setup()
-            buzzer_song.playStarWars()
-            buzzer_song.close()
+            self._buzzer_song = BuzzerSong(self._PIN_SONG)
+            self._buzzer_song.setup()
+            self._buzzer_song.playSuperMario()
+            self._buzzer_song.close()
+            
             # loud beeping
             gpio.setFunction(self._PIN_BEEP, 'DIGITAL')
             gpio.setMode(self._PIN_BEEP, 'output')
@@ -78,4 +80,10 @@ class AlarmSound:
                 self._last_minute_active = False
 
     def _stopAlarm(self, *args, **kwargs):
+        # interrupt the melody
+        try:
+            self._buzzer_song.set_stop_flag()
+        except:
+            pass
+        # set all pins to low
         self.close()
