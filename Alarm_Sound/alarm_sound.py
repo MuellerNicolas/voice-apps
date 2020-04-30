@@ -7,14 +7,18 @@ class AlarmSound:
     def __init__(self, broker, PIN):
         self.broker = broker
         broker.subscribe("alarm-beep", self._beep)
+        # stop the alarm on analog button press
         broker.subscribe("alarm-button-stop", self._stopAlarm)
         broker.subscribe("alarm-snooze", self._stopAlarm)
+        # stop the alarm if a wakeword was detected or the wakeword is starting to listen
+        broker.subscribe("wakeword-status", self._stopAlarm)
         self._thread_buzzer_flag = None
         # flag to stop the sound
         self._continue_beep = True
         # flag for timeout if the buzzer is already active
         self._last_minute_active = False
         self._PIN = PIN
+
     def _run(self):
         self._thread_buzzer_flag = threading.Event()
         self._thread_buzzer = threading.Thread(target= self._melody, name = 'voice-app-alarm-sound-thread', daemon = True)
