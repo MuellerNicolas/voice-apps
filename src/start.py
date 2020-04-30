@@ -20,11 +20,11 @@ if __name__ == "__main__":
     broker = Broker()
 
     # Components
-    # Button - stop 
-    alarm_stop_button = AlarmStopButton(broker, PIN = 1, POLLING = .125)
+    # Button - stop
+    alarm_stop_button = AlarmStopButton(broker, PIN=1, POLLING=.125)
     thread_objects.append(alarm_stop_button)
     # Button - switch
-    alarm_switch_button = AlarmSwitchButton(broker, PIN = 3, POLLING = .125)
+    alarm_switch_button = AlarmSwitchButton(broker, PIN=3, POLLING=.125)
     thread_objects.append(alarm_switch_button)
     # MQTT
     mqtt_receiver = MQTTReceiver(broker)
@@ -45,10 +45,9 @@ if __name__ == "__main__":
     alarm_time_keeper = AlarmTimeKeeper(broker)
     thread_objects.append(broker)
     # Alarm sound
-    alarm_sound = AlarmSound(broker, PIN_SONG = 4, PIN_BEEP = 2)
+    alarm_sound = AlarmSound(broker, PIN_SONG=4, PIN_BEEP=2)
     thread_objects.append(alarm_sound)
 
-    
     try:
         while(True):
             sleep(10)
