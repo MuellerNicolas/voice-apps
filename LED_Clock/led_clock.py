@@ -34,12 +34,14 @@ class LEDClock:
     def _active_callback(self, pressed):
         # Make sure, that the button is not pressed multiple times and deactivates for each time
         if(self._stop_button_pressed == False):
+            self._broker.publish('clock-time', 'start')
             self._stop_button_pressed = True
             self.display_time()
             # time period of displaying
             sleep(10)
             self.stop_displaying()
             self._stop_button_pressed = False   
+            self._broker.publish('clock-time', 'stop')
 
     def close(self):
         self._thread_flag.set()

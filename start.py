@@ -6,7 +6,8 @@ from LED_Clock.led_clock import LEDClock
 from LED_Alarm_Status.led_alarm_status import LEDAlarmStatus
 from Alarm_Time_Keeper.alarm_time_keeper import AlarmTimeKeeper
 from Alarm_Sound.alarm_sound import AlarmSound
-from MQTT_Handler.voice_mqtt_handler import MQTTHandler
+from MQTT_Handler.mqtt_receiver import MQTTReceiver
+from LED_Voice_Activate.wakeword import Wakeword 
 from time import sleep
 import traceback
 
@@ -22,8 +23,14 @@ if __name__ == "__main__":
     alarm_stop_button = AlarmStopButton(broker, PIN = 1, POLLING = .125)
     thread_objects.append(alarm_stop_button)
     # Button - switch
-    # alarm_switch_button = AlarmSwitchButton(broker, PIN = 3, POLLING = .125)
-    # thread_objects.append(alarm_switch_button)
+    alarm_switch_button = AlarmSwitchButton(broker, PIN = 3, POLLING = .125)
+    thread_objects.append(alarm_switch_button)
+    # MQTT
+    mqtt_receiver = MQTTReceiver(broker)
+    thread_objects.append(mqtt_receiver)
+    # LED Wakeword
+    led_wakeword = Wakeword(broker)
+    thread_objects.append(led_wakeword)
     # LED Clock
     led_clock = LEDClock(broker, 0, "blue", "red", "yellow")
     thread_objects.append(led_clock)
@@ -37,11 +44,8 @@ if __name__ == "__main__":
     alarm_time_keeper = AlarmTimeKeeper(broker)
     thread_objects.append(broker)
     # Alarm sound
-    alarm_sound = AlarmSound(broker, PIN = 2)
+    alarm_sound = AlarmSound(broker, PIN = 4)
     thread_objects.append(alarm_sound)
-    # MQTT
-    mqtt_handler = MQTTHandler(broker)
-    thread_objects.append(mqtt_handler)
 
     
     try:

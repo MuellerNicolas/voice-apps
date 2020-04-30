@@ -11,7 +11,7 @@ class Broker:
         if topic not in self._topics:
             self._topics[topic] = []
 
-        print(topic, ": ", callback)
+        #print(topic, ": ", callback)
         self._topics[topic].append(callback)
 
     def unsubscribe(self, topic, callback):
@@ -22,8 +22,6 @@ class Broker:
     def publish(self, topic, *args, **kwargs):
         if not topic in self._topics:
             return
-        print(topic)
-        print(*args)
         
         for callback in self._topics[topic]:
             notify_thread = threading.Thread(target = callback, args = args, kwargs = kwargs, name = "app-broker-thread")
