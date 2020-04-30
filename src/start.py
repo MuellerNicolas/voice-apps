@@ -13,40 +13,21 @@ from MQTT_Handler.mqtt_receiver import MQTTReceiver
 from REST_API_Handler.rest_api_handler import RESTApiHandler
 
 if __name__ == "__main__":
-    # array with all used components
-    thread_objects = []
-
     # Central broker
     broker = Broker()
+    # array including all components
+    thread_objects = [
+        AlarmStopButton(broker, PIN=1, POLLING=.125),      # Button - stop
+        AlarmSwitchButton(broker, PIN=3, POLLING=.125),    # Button - switch
+        MQTTReceiver(broker),                              # MQTT
+        Wakeword(broker),                                  # LED Wakeword
+        LEDClock(broker, 0, "blue", "red", "yellow"),      # LED Clock
+        LEDAlarmStatus(broker),                            # LED alarm status on switch
+        RESTApiHandler(broker),                            # REST-API-Handler for Home Assistant
+        AlarmTimeKeeper(broker),                           # Time Keepre
+        AlarmSound(broker, PIN_SONG=4, PIN_BEEP=2)         # Alarm sound
+    ]
 
-    # Components
-    # Button - stop
-    alarm_stop_button = AlarmStopButton(broker, PIN=1, POLLING=.125)
-    thread_objects.append(alarm_stop_button)
-    # Button - switch
-    alarm_switch_button = AlarmSwitchButton(broker, PIN=3, POLLING=.125)
-    thread_objects.append(alarm_switch_button)
-    # MQTT
-    mqtt_receiver = MQTTReceiver(broker)
-    thread_objects.append(mqtt_receiver)
-    # LED Wakeword
-    led_wakeword = Wakeword(broker)
-    thread_objects.append(led_wakeword)
-    # LED Clock
-    led_clock = LEDClock(broker, 0, "blue", "red", "yellow")
-    thread_objects.append(led_clock)
-    # LED alarm status on switch
-    led_alarm_status = LEDAlarmStatus(broker)
-    thread_objects.append(led_alarm_status)
-    # REST-API-Handler for Home Assistant
-    rest_api_handler = RESTApiHandler(broker)
-    thread_objects.append(rest_api_handler)
-    # Time Keeper
-    alarm_time_keeper = AlarmTimeKeeper(broker)
-    thread_objects.append(broker)
-    # Alarm sound
-    alarm_sound = AlarmSound(broker, PIN_SONG=4, PIN_BEEP=2)
-    thread_objects.append(alarm_sound)
 
     try:
         while(True):

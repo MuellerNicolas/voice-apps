@@ -1,36 +1,38 @@
-import traceback
-import threading
-import logging
 import json
+import logging
 import os
+import threading
+import traceback
+
 import paho.mqtt.client as mqtt
+
 
 class MQTTReceiver(mqtt.Client):
     def __init__(self, broker):
         super().__init__()
         self._broker = broker
-         # read mqtt setting 4 connection
+        # read mqtt setting 4 connection
         path = os.path.join(os.path.dirname(__file__), 'mqtt_settings.json')
         with open(path) as f:
             mqtt_settings = json.load(f)
         self._ip_adress = mqtt_settings["ip"]   # usually 192.168.178.19
         self._port = mqtt_settings["port"]  # usually 1883
 
-        # Thread zum empfangen der MQTT Nachrichten    
+        # Thread zum empfangen der MQTT Nachrichten
         self._thread_flag = threading.Event()
-        self._thread = threading.Thread(target= self._run, daemon = True)
+        self._thread = threading.Thread(target=self._run, daemon=True)
         self._thread.start()
-        
+
     def close(self):
         self._thread_flag.set()
         self.disconnect()
 
-
     # for msg: msg.topic, msg.qos, msg.payload
     # any message which did not match the special callbacks
+
     def on_message(self, mqttrec, obj, msg):
-        pass   
-    
+        pass
+
     def _broker_notify_wakeword(self, mosq, obj, msg):
         # test if the payload is in byte format (starting with b)
         msg_test = str(msg.payload)
@@ -45,9 +47,10 @@ class MQTTReceiver(mqtt.Client):
             self.connect(self._ip_adress, self._port)
             # Subscribe to all topics
             self.subscribe('#')
-            
+
             # Special mqtt msg callback
-            self.message_callback_add('rhasspy/en/transition/SnowboyWakeListener', self._broker_notify_wakeword)
+            self.message_callback_add(
+                'rhasspy/en/transition/SnowboyWakeListener', self._broker_notify_wakeword)
 
             # error (bzw. rc) zeigt den Status des Verbindungsverlustes an
             # returned error > 0 dann ist ein Fehler aufgtreten
