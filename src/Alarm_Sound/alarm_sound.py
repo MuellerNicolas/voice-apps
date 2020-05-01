@@ -46,7 +46,6 @@ class AlarmSound:
             self._buzzer_song = BuzzerSong(self._PIN_SONG)
             self._buzzer_song.setup()
             self._buzzer_song.playSuperMario()
-            self._buzzer_song.close()
             
             # loud beeping
             gpio.setFunction(self._PIN_BEEP, 'DIGITAL')
