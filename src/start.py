@@ -15,6 +15,8 @@ from MQTT_Handler.mqtt_receiver import MQTTReceiver
 from REST_API_Handler.rest_api_handler import RESTApiHandler
 
 if __name__ == "__main__":
+    # Setup logging
+    setup_logging(default_filename = 'logging_config.json')
     # Central broker
     broker = Broker()
     # array including all components

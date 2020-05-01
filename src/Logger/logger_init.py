@@ -12,6 +12,12 @@ def setup_logging(default_filename):
     if os.path.exists(path):
         with open(path, 'rt') as f:
             config = json.load(f)
+
+        # set the directories for the logs to this folder
+        config['handlers']['info_file_handler']['filename'] = os.path.join(os.path.dirname(__file__), config['handlers']['info_file_handler']['filename'])
+        config['handlers']['warning_file_handler']['filename'] = os.path.join(os.path.dirname(__file__), config['handlers']['warning_file_handler']['filename'])
+        config['handlers']['error_file_handler']['filename'] = os.path.join(os.path.dirname(__file__), config['handlers']['error_file_handler']['filename'])
+        #set the logging
         logging.config.dictConfig(config)
     else:
         logging.basicConfig(level=logging.INFO)
