@@ -207,5 +207,10 @@ dmypy.json
 
 # Ignore HA Authorization:
 Home_Assistant_Authorization.json
+
+# Ignore logs:
+errors.log
+info.log
+warning.log
 # End of https://www.gitignore.io/api/python,pycharm,visualstudiocode
 
