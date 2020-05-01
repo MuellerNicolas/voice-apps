@@ -210,7 +210,10 @@ Home_Assistant_Authorization.json
 
 # Ignore logs:
 errors.log
+/home/pi/voice-apps/src/Logger/errors.log
 info.log
+/home/pi/voice-apps/src/Logger/info.log
 warning.log
+/home/pi/voice-apps/src/Logger/warning.log
 # End of https://www.gitignore.io/api/python,pycharm,visualstudiocode
 
