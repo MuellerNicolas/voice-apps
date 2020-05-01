@@ -1,3 +1,4 @@
+import logging
 import traceback
 from time import sleep
 
@@ -9,6 +10,7 @@ from Broker.broker import Broker
 from LED_Alarm_Status.led_alarm_status import LEDAlarmStatus
 from LED_Clock.led_clock import LEDClock
 from LED_Voice_Activate.wakeword import Wakeword
+from Logger.logger_init import get_logger, setup_logging
 from MQTT_Handler.mqtt_receiver import MQTTReceiver
 from REST_API_Handler.rest_api_handler import RESTApiHandler
 
@@ -33,12 +35,13 @@ if __name__ == "__main__":
         while(True):
             sleep(10)
     except KeyboardInterrupt as e:
-        print(e)
+        get_logger(__name__).info(f'KeyboardInterrupt')
     except:
-        traceback.print_exc()
+        get_logger(__name__).info(f'Shutdown or Error')
+        logging.exception('Shutdown or Error!')
 
     # close / stop all threads
     for thread_object in thread_objects:
         if hasattr(thread_object, 'close'):
             thread_object.close()
-    print('Alle Threads beendet!!!')
+    get_logger(__name__).info(f'Program stopped!')
