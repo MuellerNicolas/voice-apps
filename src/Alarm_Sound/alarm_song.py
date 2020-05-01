@@ -1,6 +1,6 @@
 """
-    Forked from https://github.com/gumslone/raspi_buzzer_player/blob/master/buzzer_player.py
-    Next paragraph is the license of the forked repository:
+	Forked from https://github.com/gumslone/raspi_buzzer_player/blob/master/buzzer_player.py
+	Next paragraph is the license of the forked repository:
 """
 
 #!/usr/bin/env python
@@ -118,103 +118,116 @@ notes = {
 }
 
 class BuzzerSong:
-    def __init__(self, buzzer_pin):
-        self._buzzer_pin = buzzer_pin
-        self._stop_flag = False
+	def __init__(self, buzzer_pin):
+		self._buzzer_pin = buzzer_pin
+		self._stop_flag = False
 
-    def set_stop_flag(self):
-        self._stop_flag = True
+	def set_stop_flag(self):
+		self._stop_flag = True
 
-    def buzz(self, frequency, length):	 #create the function "buzz" and feed it the pitch and duration)
+	def buzz(self, frequency, length):	 #create the function "buzz" and feed it the pitch and duration)
 
-        if(frequency==0):
-            time.sleep(length)
-            return
-        period = 1.0 / frequency 		 #in physics, the period (sec/cyc) is the inverse of the frequency (cyc/sec)
-        delayValue = period / 2		 #calcuate the time for half of the wave
-        numCycles = int(length * frequency)	 #the number of waves to produce is the duration times the frequency
+		if(frequency==0):
+			time.sleep(length)
+			return
+		period = 1.0 / frequency 		 #in physics, the period (sec/cyc) is the inverse of the frequency (cyc/sec)
+		delayValue = period / 2		 #calcuate the time for half of the wave
+		numCycles = int(length * frequency)	 #the number of waves to produce is the duration times the frequency
 
-        for i in range(numCycles):		#start a loop from 0 to the variable "cycles" calculated above
-            gpio.setDigital(self._buzzer_pin, 'ON')	 #set buzzer_pin to high
-            time.sleep(delayValue)		#wait with buzzer_pin high
-            gpio.setDigital(self._buzzer_pin, 'OFF')		#set buzzer_pin to low
-            time.sleep(delayValue)		#wait with buzzer_pin low
-        
-    def setup(self):
-        gpio.setFunction(self._buzzer_pin, 'DIGITAL')
-        gpio.setMode(self._buzzer_pin, 'output')
-        
-    def close(self):
-        gpio.setDigital(self._buzzer_pin,"OFF")				# Set the pin to off
-        
-    def play(self, melody,tempo,pause,pace=0.800):
-        
-        for i in range(0, len(melody)):		# Play song
-            if self._stop_flag:
-                return
-            noteDuration = pace/tempo[i]
-            self.buzz(melody[i],noteDuration)	# Change the frequency along the song note
-            
-            pauseBetweenNotes = noteDuration * pause
-            time.sleep(pauseBetweenNotes)
-    
-    def playSuperMario(self):
-        melody = [
-                  notes['E7'], notes['E7'], 0, notes['E7'],
-                  0, notes['C7'], notes['E7'], 0,
-                  notes['G7'], 0, 0,  0,
-                  notes['G6'], 0, 0, 0,
-                  
-                  notes['C7'], 0, 0, notes['G6'],
-                  0, 0, notes['E6'], 0,
-                  0, notes['A6'], 0, notes['B6'],
-                  0, notes['AS6'], notes['A6'], 0,
-                  
-                  notes['G6'], notes['E7'], notes['G7'],
-                  notes['A7'], 0, notes['F7'], notes['G7'],
-                  0, notes['E7'], 0, notes['C7'],
-                  notes['D7'], notes['B6'], 0, 0,
-                  
-                  notes['C7'], 0, 0, notes['G6'],
-                  0, 0, notes['E6'], 0,
-                  0, notes['A6'], 0, notes['B6'],
-                  0, notes['AS6'], notes['A6'], 0,
-                  
-                  notes['G6'], notes['E7'], notes['G7'],
-                  notes['A7'], 0, notes['F7'], notes['G7'],
-                  0, notes['E7'], 0, notes['C7'],
-                  notes['D7'], notes['B6'], 0, 0
-                ]
-        tempo = [
-                12, 12, 12, 12,
-                12, 12, 12, 12,
-                12, 12, 12, 12,
-                12, 12, 12, 12,
+		for i in range(numCycles):		#start a loop from 0 to the variable "cycles" calculated above
+			gpio.setDigital(self._buzzer_pin, 'ON')	 #set buzzer_pin to high
+			time.sleep(delayValue)		#wait with buzzer_pin high
+			gpio.setDigital(self._buzzer_pin, 'OFF')		#set buzzer_pin to low
+			time.sleep(delayValue)		#wait with buzzer_pin low
+		
+	def setup(self):
+		gpio.setFunction(self._buzzer_pin, 'DIGITAL')
+		gpio.setMode(self._buzzer_pin, 'output')
+		
+	def close(self):
+		gpio.setDigital(self._buzzer_pin,"OFF")				# Set the pin to off
+		
+	def play(self, melody,tempo,pause,pace=0.800):
+		
+		for i in range(0, len(melody)):		# Play song
+			if self._stop_flag:
+				return
+			noteDuration = pace/tempo[i]
+			self.buzz(melody[i],noteDuration)	# Change the frequency along the song note
+			
+			pauseBetweenNotes = noteDuration * pause
+			time.sleep(pauseBetweenNotes)
+	
+	def select_song(self, name):
+		if name == 'Aus':
+			self.playNothing()
+		elif name == 'Super Mario Theme':
+			self.playSuperMario()
+		elif name == 'Super Mario Underworld Theme':
+			self.playSuperMarioUnderworld()
+		elif name == 'Star Wars Theme':
+			self.playStarWars()
+	
+	def playNothing(self):
+		pass
 
-                12, 12, 12, 12,
-                12, 12, 12, 12,
-                12, 12, 12, 12,
-                12, 12, 12, 12,
+	def playSuperMario(self):
+		melody = [
+				  notes['E7'], notes['E7'], 0, notes['E7'],
+				  0, notes['C7'], notes['E7'], 0,
+				  notes['G7'], 0, 0,  0,
+				  notes['G6'], 0, 0, 0,
+				  
+				  notes['C7'], 0, 0, notes['G6'],
+				  0, 0, notes['E6'], 0,
+				  0, notes['A6'], 0, notes['B6'],
+				  0, notes['AS6'], notes['A6'], 0,
+				  
+				  notes['G6'], notes['E7'], notes['G7'],
+				  notes['A7'], 0, notes['F7'], notes['G7'],
+				  0, notes['E7'], 0, notes['C7'],
+				  notes['D7'], notes['B6'], 0, 0,
+				  
+				  notes['C7'], 0, 0, notes['G6'],
+				  0, 0, notes['E6'], 0,
+				  0, notes['A6'], 0, notes['B6'],
+				  0, notes['AS6'], notes['A6'], 0,
+				  
+				  notes['G6'], notes['E7'], notes['G7'],
+				  notes['A7'], 0, notes['F7'], notes['G7'],
+				  0, notes['E7'], 0, notes['C7'],
+				  notes['D7'], notes['B6'], 0, 0
+				]
+		tempo = [
+				12, 12, 12, 12,
+				12, 12, 12, 12,
+				12, 12, 12, 12,
+				12, 12, 12, 12,
 
-                9, 9, 9,
-                12, 12, 12, 12,
-                12, 12, 12, 12,
-                12, 12, 12, 12,
+				12, 12, 12, 12,
+				12, 12, 12, 12,
+				12, 12, 12, 12,
+				12, 12, 12, 12,
 
-                12, 12, 12, 12,
-                12, 12, 12, 12,
-                12, 12, 12, 12,
-                12, 12, 12, 12,
+				9, 9, 9,
+				12, 12, 12, 12,
+				12, 12, 12, 12,
+				12, 12, 12, 12,
 
-                9, 9, 9,
-                12, 12, 12, 12,
-                12, 12, 12, 12,
-                12, 12, 12, 12,
-                ]
-        self.play(melody, tempo, 1.3, 0.800)
+				12, 12, 12, 12,
+				12, 12, 12, 12,
+				12, 12, 12, 12,
+				12, 12, 12, 12,
 
-    def playStarWars(self):
-        star_wars_melody = [ 
+				9, 9, 9,
+				12, 12, 12, 12,
+				12, 12, 12, 12,
+				12, 12, 12, 12,
+				]
+		self.play(melody, tempo, 1.3, 0.800)
+
+	def playStarWars(self):
+		star_wars_melody = [ 
 							notes['G4'], notes['G4'], notes['G4'], 
 							notes['EB4'], 0, notes['BB4'], notes['G4'], 
 							notes['EB4'], 0, notes['BB4'], notes['G4'], 0,
@@ -245,106 +258,108 @@ class BuzzerSong:
 							]
 
 
-        star_wars_tempo = [
-                            2, 2, 2, 
-                            4, 8, 6, 2, 
-                            4, 8, 6, 2, 8,
-                            
-                            2, 2, 2,
-                            4, 8, 6, 2,
-                            4, 8, 6, 2, 8,
-                            
-                            2, 16, 4, 4, 8,
-                            2, 8, 4, 6,
-                            6, 4, 4, 8,
-                            4, 2, 8, 
-                            4, 4, 6, 4, 2, 8,
-                            4, 2, 4, 4, 
-                            2, 8, 4, 6, 2, 8,
-                            
-                            2, 16, 4, 4, 8,
-                            2, 8, 4, 6,
-                            6, 4, 4, 8,
-                            4, 2, 8, 
-                            4, 4, 6, 4, 2, 8,
-                            4, 2, 2, 
-                            4, 2, 4, 8, 4, 2,
-                            ]
-        self.play(star_wars_melody, star_wars_tempo, 1.3, 0.800)
+		star_wars_tempo = [
+							2, 2, 2, 
+							4, 8, 6, 2, 
+							4, 8, 6, 2, 8,
+							
+							2, 2, 2,
+							4, 8, 6, 2,
+							4, 8, 6, 2, 8,
+							
+							2, 16, 4, 4, 8,
+							2, 8, 4, 6,
+							6, 4, 4, 8,
+							4, 2, 8, 
+							4, 4, 6, 4, 2, 8,
+							4, 2, 4, 4, 
+							2, 8, 4, 6, 2, 8,
+							
+							2, 16, 4, 4, 8,
+							2, 8, 4, 6,
+							6, 4, 4, 8,
+							4, 2, 8, 
+							4, 4, 6, 4, 2, 8,
+							4, 2, 2, 
+							4, 2, 4, 8, 4, 2,
+							]
+		self.play(star_wars_melody, star_wars_tempo, 1.3, 0.800)
+
+	def playSuperMarioUnderworld(self):
+		underworld_melody = [
+							notes['C4'], notes['C5'], notes['A3'], notes['A4'],
+							notes['AS3'], notes['AS4'], 0,
+							0,
+							notes['C4'], notes['C5'], notes['A3'], notes['A4'],
+							notes['AS3'], notes['AS4'], 0,
+							0,
+							notes['F3'], notes['F4'], notes['D3'], notes['D4'],
+							notes['DS3'], notes['DS4'], 0,
+							0,
+							notes['F3'], notes['F4'], notes['D3'], notes['D4'],
+							notes['DS3'], notes['DS4'], 0,
+							0, notes['DS4'], notes['CS4'], notes['D4'],
+							notes['CS4'], notes['DS4'],
+							notes['DS4'], notes['GS3'],
+							notes['G3'], notes['CS4'],
+							notes['C4'], notes['FS4'], notes['F4'], notes['E3'], notes['AS4'], notes['A4'],
+							notes['GS4'], notes['DS4'], notes['B3'],
+							notes['AS3'], notes['A3'], notes['GS3'],
+							0, 0, 0
+		]
+
+		underworld_tempo = [
+							12, 12, 12, 12,
+							12, 12, 6,
+							3,
+							12, 12, 12, 12,
+							12, 12, 6,
+							3,
+							12, 12, 12, 12,
+							12, 12, 6,
+							3,
+							12, 12, 12, 12,
+							12, 12, 6,
+							6, 18, 18, 18,
+							6, 6,
+							6, 6,
+							6, 6,
+							18, 18, 18, 18, 18, 18,
+							10, 10, 10,
+							10, 10, 10,
+							3, 3, 3
+			]
+		self.play(underworld_melody, underworld_tempo, 1.3, 0.800)
 
 """
-    TODO: encapsulate the following songs into methods and
-          add the possibilities to play different songs
+	TODO: encapsulate the following songs into methods and
+		  add the possibilities to play different songs
 """
 
 """
-underworld_melody = [
-  notes['C4'], notes['C5'], notes['A3'], notes['A4'],
-  notes['AS3'], notes['AS4'], 0,
-  0,
-  notes['C4'], notes['C5'], notes['A3'], notes['A4'],
-  notes['AS3'], notes['AS4'], 0,
-  0,
-  notes['F3'], notes['F4'], notes['D3'], notes['D4'],
-  notes['DS3'], notes['DS4'], 0,
-  0,
-  notes['F3'], notes['F4'], notes['D3'], notes['D4'],
-  notes['DS3'], notes['DS4'], 0,
-  0, notes['DS4'], notes['CS4'], notes['D4'],
-  notes['CS4'], notes['DS4'],
-  notes['DS4'], notes['GS3'],
-  notes['G3'], notes['CS4'],
-  notes['C4'], notes['FS4'], notes['F4'], notes['E3'], notes['AS4'], notes['A4'],
-  notes['GS4'], notes['DS4'], notes['B3'],
-  notes['AS3'], notes['A3'], notes['GS3'],
-  0, 0, 0
-]
-
-underworld_tempo = [
-  12, 12, 12, 12,
-  12, 12, 6,
-  3,
-  12, 12, 12, 12,
-  12, 12, 6,
-  3,
-  12, 12, 12, 12,
-  12, 12, 6,
-  3,
-  12, 12, 12, 12,
-  12, 12, 6,
-  6, 18, 18, 18,
-  6, 6,
-  6, 6,
-  6, 6,
-  18, 18, 18, 18, 18, 18,
-  10, 10, 10,
-  10, 10, 10,
-  3, 3, 3
-]
-
 adventure_time_melody = [
-    notes['D5'], 
-    notes['G5'], notes['G5'], notes['G5'], notes['G5'], notes['FS5'],
-    notes['FS5'], notes['E5'], notes['D5'], notes['E5'], notes['D5'], notes['D5'],
-    notes['C5'], notes['B5'], notes['A5'], notes['G4'],  
-    0, notes['C5'], notes['B5'], notes['A5'], notes['G4'], 0,  
-    notes['G5'], 0, notes['G5'], notes['G5'], 0, notes['G5'], 
-    notes['FS5'], 0, notes['E5'], notes['E5'], notes['D5'], notes['D5'], 
-    notes['C5'], notes['C5'], notes['C5'], notes['D5'], 
-    notes['D5'], notes['A5'], notes['B5'], notes['A5'], notes['G4'], 
-    notes['G5']
+	notes['D5'], 
+	notes['G5'], notes['G5'], notes['G5'], notes['G5'], notes['FS5'],
+	notes['FS5'], notes['E5'], notes['D5'], notes['E5'], notes['D5'], notes['D5'],
+	notes['C5'], notes['B5'], notes['A5'], notes['G4'],  
+	0, notes['C5'], notes['B5'], notes['A5'], notes['G4'], 0,  
+	notes['G5'], 0, notes['G5'], notes['G5'], 0, notes['G5'], 
+	notes['FS5'], 0, notes['E5'], notes['E5'], notes['D5'], notes['D5'], 
+	notes['C5'], notes['C5'], notes['C5'], notes['D5'], 
+	notes['D5'], notes['A5'], notes['B5'], notes['A5'], notes['G4'], 
+	notes['G5']
   ]
 adventure_time_tempo = [
-    24,
-    24, 12, 12, 12, 24,
-    12, 24, 24, 24, 12, 24,
-    12, 12, 12, 12,
-    24, 12, 24, 24, 12, 24,  
-    24, 24, 24, 12, 24, 12, 
-    24, 24, 24, 12, 12, 24, 
-    8, 24, 24, 8, 
-    8, 24, 12, 24, 24, 
-    12 
+	24,
+	24, 12, 12, 12, 24,
+	12, 24, 24, 24, 12, 24,
+	12, 12, 12, 12,
+	24, 12, 24, 24, 12, 24,  
+	24, 24, 24, 12, 24, 12, 
+	24, 24, 24, 12, 12, 24, 
+	8, 24, 24, 8, 
+	8, 24, 12, 24, 24, 
+	12 
   ]
 
 
@@ -656,9 +671,9 @@ final_countdown_tempo = [
 ]
 """
 """
-    # Songs with tempo ...:
+	# Songs with tempo ...:
 
-    print("The Final Countdown")
+	print("The Final Countdown")
 	play(final_countdown_melody, final_countdown_tempo, 0.30, 1.2000)
 	time.sleep(2)
 	print("Per Olssons Bonnagard (Old MacDonald Had A Farm) Melody")
