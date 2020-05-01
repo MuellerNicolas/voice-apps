@@ -1,9 +1,9 @@
 import json
 import os
 import threading
-import traceback
 from time import sleep
 
+from Logger.logger_init import get_logger
 from requests import get, post
 
 
@@ -53,7 +53,7 @@ class RESTApiHandler:
                 sleep(1)
                 self._thread_flag.wait()
         except:
-            traceback.print_exc()
+            get_logger(__name__).error(f'Error in Api Handler')
         finally:
             self.close()
 

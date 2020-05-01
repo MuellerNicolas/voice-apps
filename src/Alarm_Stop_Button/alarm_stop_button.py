@@ -1,11 +1,12 @@
 import threading
-import traceback
+
 from time import sleep
 
 from matrix_lite import gpio
 
 from Alarm_Stop_Button.alarm_stop_button_interface import \
     AlarmStopButtonInterface
+from Logger.logger_init import get_logger
 
 
 class AlarmStopButton(AlarmStopButtonInterface):
@@ -40,4 +41,4 @@ class AlarmStopButton(AlarmStopButtonInterface):
                     # debouncetime - 1 second: ignore any buttonpress within the next second
                     sleep(1)
         except:
-            traceback.print_exc()
+            get_logger(__name__).error(f'Error in Thread Stop Button')

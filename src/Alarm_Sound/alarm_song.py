@@ -44,7 +44,6 @@
 #---------------------------------------------------
 
 import time
-import traceback
 from time import sleep
 
 from matrix_lite import gpio

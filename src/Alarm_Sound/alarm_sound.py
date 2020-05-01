@@ -1,10 +1,11 @@
+import logging
 import threading
-import traceback
 from time import sleep
 
 from matrix_lite import gpio
 
 from Alarm_Sound.alarm_song import BuzzerSong
+from Logger.logger_init import get_logger
 
 
 class AlarmSound:
@@ -55,8 +56,10 @@ class AlarmSound:
                 sleep(1)
                 gpio.setDigital(self._PIN_BEEP, 'OFF')
                 sleep(1)
+            get_logger(__name__).info(f'Alarm was successful')
         except:
-            traceback.print_exc()
+            get_logger(__name__).error(f'A critical error occured in _melody')
+            logging.exception('Critical error in _melody')
         finally:
             # Reset the beep flag
             self._continue_beep = True
@@ -75,7 +78,7 @@ class AlarmSound:
             try:
                 sleep(60)
             except:
-                traceback.print_exc()
+                get_logger(__name__).warning(f'Interrupted debouncing of the buzzer')
             finally:
                 self._last_minute_active = False
 

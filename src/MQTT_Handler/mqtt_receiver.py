@@ -2,7 +2,6 @@ import json
 import logging
 import os
 import threading
-import traceback
 
 import paho.mqtt.client as mqtt
 

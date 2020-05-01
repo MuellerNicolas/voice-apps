@@ -1,9 +1,9 @@
 import threading
-import traceback
 from datetime import datetime
 from threading import Lock
 from time import sleep
 
+from Logger.logger_init import get_logger
 
 class AlarmTimeKeeper:
     def __init__(self, broker):
@@ -38,7 +38,7 @@ class AlarmTimeKeeper:
                 # Polling rate
                 sleep(15)
         except:
-            traceback.print_exc()
+            get_logger(__name__).error(f'Error while time polling')
             # if any error occurs try to wake me up
             self._alarmClockWakeup()
 

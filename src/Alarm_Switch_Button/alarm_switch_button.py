@@ -1,11 +1,11 @@
 import threading
-import traceback
 from time import sleep
 
 from matrix_lite import gpio
 
 from Alarm_Switch_Button.alarm_switch_button_interface import \
     AlarmSwitchButtonInterface
+from Logger.logger_init import get_logger
 
 
 class AlarmSwitchButton(AlarmSwitchButtonInterface):
@@ -43,4 +43,4 @@ class AlarmSwitchButton(AlarmSwitchButtonInterface):
                     # led effect
                     sleep(4)
         except:
-            traceback.print_exc()
+            get_logger(__name__).error(f'Error in Thread Stop Button')

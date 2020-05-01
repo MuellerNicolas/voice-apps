@@ -1,5 +1,4 @@
 import logging
-import traceback
 from time import sleep
 
 from Alarm_Sound.alarm_sound import AlarmSound
