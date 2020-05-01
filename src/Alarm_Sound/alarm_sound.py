@@ -49,7 +49,9 @@ class AlarmSound:
 		gpio.setDigital(self._PIN_SONG, 'OFF')
 
 	def _select_alarm_song_cb(self, *args, **kwargs):
-		self._selected_song = args
+		# *args is a tuple and we only want the first element (the song)
+		song = args[0]
+		self._selected_song = song
 
 	def _melody(self):
 		# First try for the not so important song

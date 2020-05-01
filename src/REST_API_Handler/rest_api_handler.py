@@ -19,7 +19,8 @@ class RESTApiHandler:
         }
         self._urls = {
             "url_time": home_assistant['url_time'],
-            "url_state": home_assistant['url_state']
+            "url_state": home_assistant['url_state'],
+            "url_song": home_assistant['url_song']
         }
         # Broker
         self._broker = broker
@@ -39,6 +40,9 @@ class RESTApiHandler:
             while True:
                 time = self._get_alarm_time()
                 state = self._get_alarm_state()
+                song = self._get_alarm_song()
+                # Don't check if song request was successful,
+                # because the alarm will work without it
                 # Check if the request was successful
                 if(time.status_code != 200 or state.status_code != 200):
                     # Not successful, go on threading
@@ -48,6 +52,10 @@ class RESTApiHandler:
                     alarm_info = self._format_alarm_info(time, state)
                     # Send the alarm_info to all subscribers
                     self._broker.publish('alarm-info', alarm_info)
+                    # Send the selected song, if the request was successful
+                    if(song.status_code == 200):
+                        alarm_song = self._format_alarm_song(song)
+                        self._broker.publish('alarm-song-selected', alarm_song)
                     # Request was successful, stop the thread
                     return
                 sleep(1)
@@ -64,6 +72,14 @@ class RESTApiHandler:
     def _get_alarm_state(self):
         state = get(self._urls["url_state"], headers = self._headers)
         return state
+
+    def _get_alarm_song(self):
+        song = get(self._urls["url_song"], headers = self._headers)
+        return song
+    
+    def _format_alarm_song(self, song):
+        song = song.json()
+        return song["state"]
 
     def _format_alarm_info(self, time, state):
         alarm_info = {}
