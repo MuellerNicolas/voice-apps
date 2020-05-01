@@ -16,6 +16,7 @@ from REST_API_Handler.rest_api_handler import RESTApiHandler
 if __name__ == "__main__":
     # Setup logging
     setup_logging(default_filename = 'logging_config.json')
+    get_logger(__name__).info(f'voice-apps started!')
     # Central broker
     broker = Broker()
     # array including all components
@@ -45,4 +46,4 @@ if __name__ == "__main__":
     for thread_object in thread_objects:
         if hasattr(thread_object, 'close'):
             thread_object.close()
-    get_logger(__name__).info(f'Program stopped!')
+    get_logger(__name__).info(f'voice-apps stopped!')
