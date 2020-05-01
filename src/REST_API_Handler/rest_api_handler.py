@@ -123,6 +123,12 @@ class RESTApiHandler:
                 self._broker.publish('alarm-switch-led', 'on')
                 # send the new alarm info to the time keeper
                 self._broker.publish('alarm-info', alarm_info)
+        # refresh the selected song
+        song = self._get_alarm_song()
+        # Send the selected song, if the request was successful
+        if(song.status_code == 200):
+            alarm_song = self._format_alarm_song(song)
+            self._broker.publish('alarm-song-selected', alarm_song)
 
     def _initiate_request_callback(self):
         self._thread_flag.set()
