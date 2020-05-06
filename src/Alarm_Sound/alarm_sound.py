@@ -43,7 +43,8 @@ class AlarmSound:
 	def close(self):
 		if self._thread_buzzer_flag != None:
 			self._thread_buzzer_flag.set()
-		self._continue_beep = False
+		if self._continue_beep == True:
+			self._continue_beep = False
 		# Make sure there is no power on the pin after closing
 		gpio.setDigital(self._PIN_BEEP, 'OFF')
 		gpio.setDigital(self._PIN_SONG, 'OFF')
@@ -54,6 +55,8 @@ class AlarmSound:
 		self._selected_song = song
 
 	def _melody(self):
+		# make sure the stop-flag is not accidently set
+		self._continue_beep = True
 		# First try for the not so important song
 		try:
 			# quiet song
