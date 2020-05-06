@@ -2,7 +2,7 @@
 Actions triggered by intends, received via MQTT and HTTP. Therefore the application is using the publish-subscribe design pattern. New components can easily implemented by subscibing to certain topics at the broker. **This application is embedded in an offline, mostly open source ecosystem.**
 
 ## Attention
-I developed this python program in my freetime and therefore focused on integrating this special hardware to my smart home ecosystem. You might be able to use it without some of the components i've used or even with your own hardware, if you adapt the code accordingly. This application shows an approach on how to add an alarm to your (rhasspy) voice assistant.
+I developed this python program in my freetime and therefore focused on integrating this special hardware to my smart home ecosystem. You might be able to use it without some of the components i've used or even with your own hardware, if you adapt the code accordingly. This application shows an approach on how to add an alarm to your (rhasspy) voice assistant. Even if you have the same setup and smart home ecosystem, there are a few things, you would have to adjust in the code. (mainly concerning the home assistant entities and rest-api)
 
 ## Current Apps
 - Alarm Clock
