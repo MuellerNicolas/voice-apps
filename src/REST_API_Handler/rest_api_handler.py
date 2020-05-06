@@ -9,6 +9,12 @@ from requests import get, post
 
 class RESTApiHandler:
     def __init__(self, broker):
+        """ 
+            !!!ATTENTION!!!
+            Adapt example_for_home_assistant_rest_athorization.json with
+            your specific authorization aswell as your specific entities
+            and replace the filename below
+        """
         # get the home assistant authorization key
         path = os.path.join(os.path.dirname(__file__), 'Home_Assistant_Authorization.json')
         with open(path) as f:

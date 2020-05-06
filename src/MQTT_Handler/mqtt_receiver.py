@@ -46,7 +46,11 @@ class MQTTReceiver(mqtt.Client):
             self.connect(self._ip_adress, self._port)
             # Subscribe to all topics
             self.subscribe('#')
-
+            """
+                !!!Attention!!!
+                Adapt the wake word topic to your specific wake word topic, which may vary 
+                by wake word engine and your country
+            """
             # Special mqtt msg callback
             self.message_callback_add(
                 'rhasspy/en/transition/SnowboyWakeListener', self._broker_notify_wakeword)
