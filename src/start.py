@@ -21,15 +21,15 @@ if __name__ == "__main__":
     broker = Broker()
     # array including all components
     thread_objects = [
-        AlarmStopButton(broker, PIN=1, POLLING=.125),      # Button - stop
-        AlarmSwitchButton(broker, PIN=3, POLLING=.125),    # Button - switch
+        AlarmStopButton(broker, PIN=0, POLLING=.125),      # Button - stop
+        AlarmSwitchButton(broker, PIN=2, POLLING=.125),    # Button - switch
         MQTTReceiver(broker),                              # MQTT
         Wakeword(broker),                                  # LED Wakeword
         LEDClock(broker, 0, "blue", "red", "yellow"),      # LED Clock
         LEDAlarmStatus(broker),                            # LED alarm status on switch
         RESTApiHandler(broker),                            # REST-API-Handler for Home Assistant
         AlarmTimeKeeper(broker),                           # Time Keepre
-        AlarmSound(broker, PIN_SONG=4, PIN_BEEP=2)         # Alarm sound
+        AlarmSound(broker, PIN_SONG=6, PIN_BEEP=4)         # Alarm sound - PIN-SONG = Passive Buzzer / PIN_BEEP = Active Buzzer
     ]
 
 
