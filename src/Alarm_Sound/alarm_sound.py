@@ -79,6 +79,9 @@ class AlarmSound:
 			# each iteration takes 2 seconds and i want the alarm to continue 
 			# straight for 5 minutes, after this time it should end automatically
 			for i in range(150):
+				# alarm was stopped
+				if(not self._continue_beep):
+					break
 				gpio.setDigital(self._PIN_BEEP, 'ON')
 				sleep(1)
 				gpio.setDigital(self._PIN_BEEP, 'OFF')
