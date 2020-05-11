@@ -34,10 +34,10 @@ class RESTApiHandler:
         self._broker.subscribe("alarm-button-switch", self._set_alarm_state)
 
         # Thread
+        self._threadActive = True
         self._thread_flag = threading.Event()
-        self._threadActive = False
-        # start thread
-        self._initiate_request_callback()
+        self._thread = threading.Thread(target= self._http_polling, name = 'REST-API-Thread', daemon = True)
+        self._thread.start()
 
     def close(self):
         self._thread_flag.set()
