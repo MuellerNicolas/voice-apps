@@ -35,6 +35,9 @@ class AlarmTimeKeeper:
                 elif(self._alarm_info["state"] == "on"):
                     if(hour == self._alarm_info["hour"] and minute == self._alarm_info["minute"]):
                         self._alarmClockWakeup()
+                # Initiate a http request every 15 minutes
+                if(minute == 15 or minute == 45):
+                    self._initiateApiGet()
                 # Polling rate
                 sleep(15)
         except:
@@ -47,3 +50,6 @@ class AlarmTimeKeeper:
 
     def _alarmClockWakeup(self):
         self._broker.publish("alarm-beep")
+
+    def _initiateApiGet(self):
+        self._broker.publish("alarm-request-info")

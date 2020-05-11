@@ -35,8 +35,9 @@ class RESTApiHandler:
 
         # Thread
         self._thread_flag = threading.Event()
-        self._thread = threading.Thread(target= self._http_polling, name = 'REST-API-Thread', daemon = True)
-        self._thread.start()
+        self._threadActive = False
+        # start thread
+        self._initiate_request_callback()
 
     def close(self):
         self._thread_flag.set()
@@ -70,6 +71,7 @@ class RESTApiHandler:
             get_logger(__name__).error(f'Error in Api Handler')
         finally:
             self.close()
+            self._threadActive = False
 
     def _get_alarm_time(self):
         time = get(self._urls["url_time"], headers = self._headers)
@@ -137,4 +139,10 @@ class RESTApiHandler:
             self._broker.publish('alarm-song-selected', alarm_song)
 
     def _initiate_request_callback(self):
-        self._thread_flag.set()
+        if(self._threadActive):
+            self._thread_flag.set()
+        else:
+            self._thread_flag = threading.Event()
+            self._thread = threading.Thread(target= self._http_polling, name = 'REST-API-Thread', daemon = True)
+            self._thread.start()
+            self._threadActive = True

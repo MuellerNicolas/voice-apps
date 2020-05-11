@@ -76,7 +76,9 @@ class AlarmSound:
 			# loud beeping
 			gpio.setFunction(self._PIN_BEEP, 'DIGITAL')
 			gpio.setMode(self._PIN_BEEP, 'output')
-			while self._continue_beep:
+			# each iteration takes 2 seconds and i want the alarm to continue 
+			# straight for 5 minutes, after this time it should end automatically
+			for i in range(150):
 				gpio.setDigital(self._PIN_BEEP, 'ON')
 				sleep(1)
 				gpio.setDigital(self._PIN_BEEP, 'OFF')
