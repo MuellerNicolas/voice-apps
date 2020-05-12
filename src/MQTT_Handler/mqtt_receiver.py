@@ -41,6 +41,9 @@ class MQTTReceiver(mqtt.Client):
         # payload possibilities: loaded and the opposite: listening
         self._broker.publish('wakeword-status', msg.payload)
 
+    def _broker_notify_show_time(self, mosq, obj, msg):
+        self._broker.publish('voice-show-time')
+
     def _run(self):
         try:
             self.connect(self._ip_adress, self._port)
@@ -54,6 +57,8 @@ class MQTTReceiver(mqtt.Client):
             # Special mqtt msg callback
             self.message_callback_add(
                 'rhasspy/en/transition/SnowboyWakeListener', self._broker_notify_wakeword)
+            self.message_callback_add(
+                'rhasspy/intent/GetTime', self._broker_notify_show_time)
 
             # error (bzw. rc) zeigt den Status des Verbindungsverlustes an
             # returned error > 0 dann ist ein Fehler aufgtreten
