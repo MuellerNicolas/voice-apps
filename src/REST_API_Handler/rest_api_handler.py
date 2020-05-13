@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import threading
 from time import sleep
@@ -69,6 +70,7 @@ class RESTApiHandler:
                 self._thread_flag.wait()
         except:
             get_logger(__name__).error(f'Error in Api Handler')
+            logging.exception("Error info:")
         finally:
             self.close()
             self._threadActive = False

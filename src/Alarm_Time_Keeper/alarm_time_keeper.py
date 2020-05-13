@@ -1,4 +1,5 @@
 import threading
+import logging
 from datetime import datetime
 from threading import Lock
 from time import sleep
@@ -36,12 +37,13 @@ class AlarmTimeKeeper:
                     if(hour == self._alarm_info["hour"] and minute == self._alarm_info["minute"]):
                         self._alarmClockWakeup()
                 # Initiate a http request every 15 minutes
-                if(minute == 15 or minute == 45):
+                if(minute == 15 or minute == 45 or minute == 30):
                     self._initiateApiGet()
                 # Polling rate
                 sleep(15)
         except:
             get_logger(__name__).error(f'Error while time polling')
+            logging.exception("error info: ")
         finally:
             # if any error occurs try to wake me up
             # has to wait 10 sec, cuz the alarm_sound has to be initialized

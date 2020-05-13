@@ -4,7 +4,7 @@ import os
 import threading
 
 import paho.mqtt.client as mqtt
-
+from Logger.logger_init import get_logger
 
 class MQTTReceiver(mqtt.Client):
     def __init__(self, broker):
@@ -67,4 +67,6 @@ class MQTTReceiver(mqtt.Client):
                 error = self.loop()
             return error
         finally:
+            get_logger(__name__).info(f'error in mqtt receiver rc = {error}')
+            logging.exception("error info: ")
             self.disconnect()
