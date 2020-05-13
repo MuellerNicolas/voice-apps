@@ -2,10 +2,10 @@ import json
 import logging
 import os
 import threading
-import sleep
 
 import paho.mqtt.client as mqtt
 from Logger.logger_init import get_logger
+from time import sleep
 
 class MQTTReceiver(mqtt.Client):
     def __init__(self, broker):
