@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import threading
+import sleep
 
 import paho.mqtt.client as mqtt
 from Logger.logger_init import get_logger
@@ -45,6 +46,8 @@ class MQTTReceiver(mqtt.Client):
         self._broker.publish('voice-show-time')
 
     def _run(self):
+        # ensure the mqtt-broker is already running
+        sleep(30)
         try:
             self.connect(self._ip_adress, self._port)
             # Subscribe to all topics
