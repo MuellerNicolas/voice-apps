@@ -31,4 +31,5 @@ I developed this python program in my freetime and therefore focused on integrat
 
 ## Setup inspiration
 <img src="https://github.com/MuellerNicolas/voice-apps/blob/master/src/img/voice-control-jarvis.jpg" width="500em"></img>
-
+<img src="https://github.com/MuellerNicolas/voice-apps/blob/master/src/img/voice-control-from-side.jpg" width="500em"></img>
+<img src="https://github.com/MuellerNicolas/voice-apps/blob/master/src/img/voice-control-from-above.jpg" width="500em"></img>
