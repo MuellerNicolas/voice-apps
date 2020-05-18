@@ -65,6 +65,7 @@ class RESTApiHandler:
                     if(song.status_code == 200):
                         alarm_song = self._format_alarm_song(song)
                         self._broker.publish('alarm-song-selected', alarm_song)
+                    get_logger(__name__).info(f'Successfully received alarm infos!')
                     # Request was successful, stop the thread
                     return
                 sleep(10)
