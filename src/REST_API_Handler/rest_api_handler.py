@@ -45,6 +45,8 @@ class RESTApiHandler:
 
     def _http_polling(self):
         try:
+            # prevent exceeding requests at startup
+            sleep(10)
             while True:
                 get_logger(__name__).info(f'http api try')
                 time = self._get_alarm_time()
@@ -69,7 +71,9 @@ class RESTApiHandler:
                     # Request was successful, stop the thread
                     return
                 sleep(10)
+                get_logger(__name__).info(f'Before wait!')
                 self._thread_flag.wait()
+                get_logger(__name__).info(f'After wait!')
         except:
             get_logger(__name__).error(f'Error in Api Handler')
             logging.exception("Error info:")
@@ -145,8 +149,10 @@ class RESTApiHandler:
     def _initiate_request_callback(self):
         if(self._threadActive):
             self._thread_flag.set()
+            get_logger(__name__).info(f'Initiate thread active')
         else:
             self._thread_flag = threading.Event()
             self._thread = threading.Thread(target= self._http_polling, name = 'REST-API-Thread', daemon = True)
             self._thread.start()
             self._threadActive = True
+            get_logger(__name__).info(f'Initiate thread inactive')
