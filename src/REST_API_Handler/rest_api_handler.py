@@ -46,6 +46,7 @@ class RESTApiHandler:
     def _http_polling(self):
         try:
             while True:
+                get_logger(__name__).info(f'http api try')
                 time = self._get_alarm_time()
                 state = self._get_alarm_state()
                 song = self._get_alarm_song()
@@ -66,7 +67,7 @@ class RESTApiHandler:
                         self._broker.publish('alarm-song-selected', alarm_song)
                     # Request was successful, stop the thread
                     return
-                sleep(1)
+                sleep(10)
                 self._thread_flag.wait()
         except:
             get_logger(__name__).error(f'Error in Api Handler')
