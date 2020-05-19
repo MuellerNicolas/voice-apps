@@ -17,7 +17,8 @@ class MQTTReceiver(mqtt.Client):
             mqtt_settings = json.load(f)
         self._ip_adress = mqtt_settings["ip"]   # usually 192.168.178.19
         self._port = mqtt_settings["port"]  # usually 1883
-
+        #setup logging
+        self.enable_logger(get_logger(__name__))
         # Thread zum empfangen der MQTT Nachrichten
         self._thread_flag = threading.Event()
         self._thread = threading.Thread(target=self._run, daemon=True)
@@ -72,4 +73,3 @@ class MQTTReceiver(mqtt.Client):
         finally:
             get_logger(__name__).info(f'error in mqtt receiver rc = {error}')
             logging.exception("error info: ")
-            self.disconnect()
