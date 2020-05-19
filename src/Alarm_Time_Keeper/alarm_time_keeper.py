@@ -40,7 +40,7 @@ class AlarmTimeKeeper:
                 if(minute == 15 or minute == 45 or minute == 30):
                     self._initiateApiGet()
                 # Polling rate
-                sleep(15)
+                sleep(58)
         except:
             get_logger(__name__).error(f'Error while time polling')
             logging.exception("error info: ")
