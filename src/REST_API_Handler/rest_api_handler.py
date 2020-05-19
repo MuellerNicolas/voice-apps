@@ -56,6 +56,7 @@ class RESTApiHandler:
                 # because the alarm will work without it
                 # Check if the request was successful
                 if(time.status_code != 200 or state.status_code != 200):
+                    get_logger(__name__).warn(f'GET Request failed with code {time.status_code}!')
                     # Not successful, go on threading
                     self._thread_flag.set()
                 else:
@@ -71,9 +72,7 @@ class RESTApiHandler:
                     # Request was successful, stop the thread
                     return
                 sleep(10)
-                get_logger(__name__).info(f'Before wait!')
                 self._thread_flag.wait()
-                get_logger(__name__).info(f'After wait!')
         except:
             get_logger(__name__).error(f'Error in Api Handler')
             logging.exception("Error info:")
