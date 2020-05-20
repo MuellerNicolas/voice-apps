@@ -37,10 +37,10 @@ class AlarmTimeKeeper:
                     if(hour == self._alarm_info["hour"] and minute == self._alarm_info["minute"]):
                         self._alarmClockWakeup()
                 # Initiate a http request every 15 minutes
-                if(minute == 15 or minute == 45 or minute == 30):
+                if(minute == 15 or minute == 30 or minute == 45):
                     self._initiateApiGet()
                 # Polling rate
-                sleep(58)
+                sleep(45)
         except:
             get_logger(__name__).error(f'Error while time polling')
             logging.exception("error info: ")
