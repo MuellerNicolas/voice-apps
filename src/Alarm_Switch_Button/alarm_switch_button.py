@@ -29,6 +29,7 @@ class AlarmSwitchButton(AlarmSwitchButtonInterface):
     def _triggered(self):
         # notify all interested compontents about the event
         self._broker.publish('alarm-button-switch', 'pressed')
+        get_logger(__name__).info(f'Toggle alarm state')
 
     def _check_pressed(self):
         try:
