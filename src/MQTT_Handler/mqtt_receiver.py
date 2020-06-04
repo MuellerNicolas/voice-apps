@@ -58,9 +58,13 @@ class MQTTReceiver(mqtt.Client):
                 Adapt the wake word topic to your specific wake word topic, which may vary 
                 by wake word engine and your country
             """
-            # Special mqtt msg callback
+            # Snowboy hotword
             self.message_callback_add(
                 'rhasspy/en/transition/SnowboyWakeListener', self._broker_notify_wakeword)
+            # Porcupine hotword
+            self.message_callback_add(
+                'rhasspy/en/transition/PorcupineWakeListener', self._broker_notify_wakeword)
+            # Time app
             self.message_callback_add(
                 'rhasspy/intent/GetTime', self._broker_notify_show_time)
 
