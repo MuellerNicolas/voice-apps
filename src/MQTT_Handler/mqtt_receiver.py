@@ -36,7 +36,13 @@ class MQTTReceiver(mqtt.Client):
 
     def _broker_notify_show_time(self, mosq, obj, msg):
         self._broker.publish('voice-show-time')
-
+    def _broker_notify_led_on(self, mosq, obj, msg):
+        self._broker.publish('led-on')
+    def _broker_notify_led_rainbow(self, mosq, obj, msg):
+        self._broker.publish('led-rainbow')
+    def _broker_notify_led_off(self, mosq, obj, msg):
+        self._broker.publish('led-off')
+        
     def _run(self):
         # ensure the mqtt-broker is already running
         sleep(30)
@@ -51,8 +57,16 @@ class MQTTReceiver(mqtt.Client):
             """
             # Time app
             self.message_callback_add(
-                'rhasspy/intent/GetTime', self._broker_notify_show_time)
-
+                'hermes/intent/GetTime', self._broker_notify_show_time)
+            # light leds
+            self.message_callback_add(
+                'hermes/intent/LedOn', self._broker_notify_led_on)
+            # led rainbow
+            self.message_callback_add(
+                'hermes/intent/LedRainbow', self._broker_notify_led_rainbow)
+            # turn led off
+            self.message_callback_add(
+                'hermes/intent/LedOff', self._broker_notify_led_off)
             # error (bzw. rc) zeigt den Status des Verbindungsverlustes an
             # returned error > 0 dann ist ein Fehler aufgtreten
             error = 0

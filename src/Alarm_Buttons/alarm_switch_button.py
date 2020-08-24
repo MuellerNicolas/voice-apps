@@ -1,15 +1,14 @@
 import threading
-
 from time import sleep
 
 from matrix_lite import gpio
 
-from Alarm_Stop_Button.alarm_stop_button_interface import \
-    AlarmStopButtonInterface
+from Alarm_Buttons.alarm_switch_button_interface import \
+    AlarmSwitchButtonInterface
 from Logger.logger_init import get_logger
 
 
-class AlarmStopButton(AlarmStopButtonInterface):
+class AlarmSwitchButton(AlarmSwitchButtonInterface):
     def __init__(self, broker, PIN, POLLING):
         self._broker = broker
 
@@ -21,7 +20,7 @@ class AlarmStopButton(AlarmStopButtonInterface):
         # thread for polling to press events on the button
         self._thread_button_flag = threading.Event()
         self._thread_button = threading.Thread(
-            target=self._check_pressed, name='voice-app-alarm-stop-button', daemon=True)
+            target=self._check_pressed, name='voice-app-alarm-switch-button', daemon=True)
         self._thread_button.start()
 
     def close(self):
@@ -29,7 +28,8 @@ class AlarmStopButton(AlarmStopButtonInterface):
 
     def _triggered(self):
         # notify all interested compontents about the event
-        self._broker.publish('alarm-button-stop', 'pressed')
+        self._broker.publish('alarm-button-switch', 'pressed')
+        get_logger(__name__).info(f'Toggle alarm state')
 
     def _check_pressed(self):
         try:
@@ -38,7 +38,10 @@ class AlarmStopButton(AlarmStopButtonInterface):
                 if (gpio.getDigital(self._PIN)) == 1:
                     # notify all interested compontents about the event
                     self._triggered()
-                    # debouncetime - 1 second: ignore any buttonpress within the next second
-                    sleep(1)
+                    # debouncetime - 4 second: ignore any buttonpress within the next second
+                    # set to 4 seconds, because the leds will last 4 seconds
+                    # otherwise multiple presses after one another will cause a strange
+                    # led effect
+                    sleep(4)
         except:
             get_logger(__name__).error(f'Error in Thread Stop Button')
