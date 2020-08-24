@@ -167,6 +167,22 @@ class BuzzerSong:
 			self.playSuperMarioUnderworld()
 		elif name == 'Star Wars Theme':
 			self.playStarWars()
+		elif name == 'Adventure Time':
+			self.playAdventureTime()
+		elif name == 'Popcorn':
+			self.playPopcorn()
+		elif name == 'Twinkle twinkle':
+			self.playTwinkleTwinkle()
+		elif name == 'Crazy Frog':
+			self.playCrazyFrog()
+		elif name == 'Deck the halls':
+			self.playDeckTheHalls()
+		elif name == 'Manaderna':
+			self.playManaderna()
+		elif name == 'Bonnagard':
+			self.playBonnagard()
+		elif name == 'Final Countdown':
+			self.playFinalCountdown()
 	
 	def playNothing(self):
 		pass
@@ -331,379 +347,318 @@ class BuzzerSong:
 			]
 		self.play(underworld_melody, underworld_tempo, 1.3, 0.800)
 
-"""
-	TODO: encapsulate the following songs into methods and
-		  add the possibilities to play different songs
-"""
+	def playAdventureTime(self):
+		adventure_time_melody = [
+			notes['D5'], 
+			notes['G5'], notes['G5'], notes['G5'], notes['G5'], notes['FS5'],
+			notes['FS5'], notes['E5'], notes['D5'], notes['E5'], notes['D5'], notes['D5'],
+			notes['C5'], notes['B5'], notes['A5'], notes['G4'],  
+			0, notes['C5'], notes['B5'], notes['A5'], notes['G4'], 0,  
+			notes['G5'], 0, notes['G5'], notes['G5'], 0, notes['G5'], 
+			notes['FS5'], 0, notes['E5'], notes['E5'], notes['D5'], notes['D5'], 
+			notes['C5'], notes['C5'], notes['C5'], notes['D5'], 
+			notes['D5'], notes['A5'], notes['B5'], notes['A5'], notes['G4'], 
+			notes['G5']
+		]
+		adventure_time_tempo = [
+			24,
+			24, 12, 12, 12, 24,
+			12, 24, 24, 24, 12, 24,
+			12, 12, 12, 12,
+			24, 12, 24, 24, 12, 24,  
+			24, 24, 24, 12, 24, 12, 
+			24, 24, 24, 12, 12, 24, 
+			8, 24, 24, 8, 
+			8, 24, 12, 24, 24, 
+			12 
+		]
+		self.play(adventure_time_melody, adventure_time_tempo, 1.3, 1.500)
 
-"""
-adventure_time_melody = [
-	notes['D5'], 
-	notes['G5'], notes['G5'], notes['G5'], notes['G5'], notes['FS5'],
-	notes['FS5'], notes['E5'], notes['D5'], notes['E5'], notes['D5'], notes['D5'],
-	notes['C5'], notes['B5'], notes['A5'], notes['G4'],  
-	0, notes['C5'], notes['B5'], notes['A5'], notes['G4'], 0,  
-	notes['G5'], 0, notes['G5'], notes['G5'], 0, notes['G5'], 
-	notes['FS5'], 0, notes['E5'], notes['E5'], notes['D5'], notes['D5'], 
-	notes['C5'], notes['C5'], notes['C5'], notes['D5'], 
-	notes['D5'], notes['A5'], notes['B5'], notes['A5'], notes['G4'], 
-	notes['G5']
-  ]
-adventure_time_tempo = [
-	24,
-	24, 12, 12, 12, 24,
-	12, 24, 24, 24, 12, 24,
-	12, 12, 12, 12,
-	24, 12, 24, 24, 12, 24,  
-	24, 24, 24, 12, 24, 12, 
-	24, 24, 24, 12, 12, 24, 
-	8, 24, 24, 8, 
-	8, 24, 12, 24, 24, 
-	12 
-  ]
+	def playPopcorn(self):
+		popcorn_melody = [
+			notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'], 
+			notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'], 
+			
+			notes['A4'], notes['B4'], notes['C5'], notes['B4'], notes['C5'], notes['A4'], notes['B4'], notes['A4'], notes['B4'], notes['G4'], 
+			notes['A4'], notes['G4'],notes['A4'], notes['F4'], notes['A4'],
+			
+			
+			notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'], 
+			notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'], 
+			
+			notes['A4'], notes['B4'], notes['C5'], notes['B4'], notes['C5'], notes['A4'], notes['B4'], notes['A4'], notes['B4'], notes['G4'], 
+			notes['A4'], notes['G4'],notes['A4'], notes['B4'], notes['C5'],
+			
+			notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'], 
+			notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'], 
+			
+			notes['E5'], notes['FS5'], notes['G5'], notes['FS5'], notes['G5'], notes['E5'], notes['FS5'], notes['E5'], notes['FS5'], notes['D5'], 
+			notes['E5'], notes['D5'],notes['E5'], notes['C5'], notes['E5'],
+			
+			notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'], 
+			notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'], 
+			
+			notes['E5'], notes['FS5'], notes['G5'], notes['FS5'], notes['G5'], notes['E5'], notes['FS5'], notes['E5'], notes['FS5'], notes['D5'], 
+			notes['E5'], notes['D5'],notes['B4'], notes['D5'], notes['E5'],
+		]
+		popcorn_tempo = [
+			8,8,8,8,8,8,4,
+			8,8,8,8,8,8,4,
+			
+			8,8,8,8,8,8,8,8,8,8,
+			8,8,8,8,4,
+			
+			8,8,8,8,8,8,4,
+			8,8,8,8,8,8,4,
+			
+			8,8,8,8,8,8,8,8,8,8,
+			8,8,8,8,4,
+			
+			8,8,8,8,8,8,4,
+			8,8,8,8,8,8,4,
+			
+			8,8,8,8,8,8,8,8,8,8,
+			8,8,8,8,4,
+			
+			8,8,8,8,8,8,4,
+			8,8,8,8,8,8,4,
+			
+			8,8,8,8,8,8,8,8,8,8,
+			8,8,8,8,4,
+		]
+		self.play(popcorn_melody, popcorn_tempo, 0.50, 1.000)
 
+	def playTwinkleTwinkle(self):
+		twinkle_twinkle_melody = [
+			notes['C4'], notes['C4'], notes['G4'], notes['G4'], notes['A4'], notes['A4'], notes['G4'],
+			notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'], notes['D4'], notes['C4'],
+			
+			notes['G4'], notes['G4'], notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'],
+			notes['G4'], notes['G4'], notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'],
+			
+			notes['C4'], notes['C4'], notes['G4'], notes['G4'], notes['A4'], notes['A4'], notes['G4'],
+			notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'], notes['D4'], notes['C4'],
+		]
 
-star_wars_melody_deeper = [ 
-					notes['G3'], notes['G3'], notes['G3'], 
-					notes['EB3'], 0, notes['BB3'], notes['G3'], 
-					notes['EB3'], 0, notes['BB3'], notes['G3'], 0,
-					
-					notes['D3'], notes['D3'], notes['D3'], 
-					notes['EB3'], 0, notes['BB2'], notes['FS2'],
-					notes['EB2'], 0, notes['BB2'], notes['G3'], 0,
-					
-					notes['G3'], 0, notes['G2'], notes['G2'], 0,
-					notes['G3'], 0, notes['FS3'], notes['F3'], 
-					notes['E3'], notes['EB3'], notes['E3'], 0,
-					notes['GS2'], notes['CS2'], 0, 
-					
-					notes['C2'], notes['B2'], notes['BB2'], notes['A2'], notes['BB2'], 0,
-					notes['EB2'], notes['FS2'], notes['EB2'], notes['FS2'], 
-					notes['BB2'], 0, notes['G2'], notes['BB2'], notes['D3'], 0,
-					
-					
-					notes['G3'], 0, notes['G2'], notes['G2'], 0,
-					notes['G3'], 0, notes['FS3'], notes['F3'], 
-					notes['E3'], notes['EB3'], notes['E3'], 0,
-					notes['GS2'], notes['CS2'], 0, 
-					
-					notes['C2'], notes['B2'], notes['BB2'], notes['A2'], notes['BB2'], 0,
-					
-					notes['EB2'], notes['FS2'], notes['EB2'],  
-					notes['BB2'], notes['G2'], notes['EB2'], 0, notes['BB2'], notes['G2'],
-					]
+		twinkle_twinkle_tempo = [
+			4,4,4,4,4,4,2,
+			4,4,4,4,4,4,2,
+			
+			4,4,4,4,4,4,2,
+			4,4,4,4,4,4,2,
+			
+			4,4,4,4,4,4,2,
+			4,4,4,4,4,4,2,
+		]
+		self.play(twinkle_twinkle_melody, twinkle_twinkle_tempo, 0.50, 1.000)
 
+	def playCrazyFrog(self):
+		crazy_frog_melody = [
+			notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'], 
+			notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
+			notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'], 
+			notes['A4'],0,
+			
+			notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'], 
+			notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
+			notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'], 
+			notes['A4'],0,
+			
+			
+			notes['A3'], notes['G3'], notes['E3'], notes['D3'],
+			
+			notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'], 
+			notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
+			notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'], 
+			notes['A4'],
+		]
 
-popcorn_melody = [
-	
-	notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'], 
-	notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'], 
-	
-	notes['A4'], notes['B4'], notes['C5'], notes['B4'], notes['C5'], notes['A4'], notes['B4'], notes['A4'], notes['B4'], notes['G4'], 
-	notes['A4'], notes['G4'],notes['A4'], notes['F4'], notes['A4'],
-	
-	
-	notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'], 
-	notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'], 
-	
-	notes['A4'], notes['B4'], notes['C5'], notes['B4'], notes['C5'], notes['A4'], notes['B4'], notes['A4'], notes['B4'], notes['G4'], 
-	notes['A4'], notes['G4'],notes['A4'], notes['B4'], notes['C5'],
-	
-	notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'], 
-	notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'], 
-	
-	notes['E5'], notes['FS5'], notes['G5'], notes['FS5'], notes['G5'], notes['E5'], notes['FS5'], notes['E5'], notes['FS5'], notes['D5'], 
-	notes['E5'], notes['D5'],notes['E5'], notes['C5'], notes['E5'],
-	
-	notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'], 
-	notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'], 
-	
-	notes['E5'], notes['FS5'], notes['G5'], notes['FS5'], notes['G5'], notes['E5'], notes['FS5'], notes['E5'], notes['FS5'], notes['D5'], 
-	notes['E5'], notes['D5'],notes['B4'], notes['D5'], notes['E5'],
-]
-popcorn_tempo = [
-	8,8,8,8,8,8,4,
-	8,8,8,8,8,8,4,
-	
-	8,8,8,8,8,8,8,8,8,8,
-	8,8,8,8,4,
-	
-	8,8,8,8,8,8,4,
-	8,8,8,8,8,8,4,
-	
-	8,8,8,8,8,8,8,8,8,8,
-	8,8,8,8,4,
-	
-	8,8,8,8,8,8,4,
-	8,8,8,8,8,8,4,
-	
-	8,8,8,8,8,8,8,8,8,8,
-	8,8,8,8,4,
-	
-	8,8,8,8,8,8,4,
-	8,8,8,8,8,8,4,
-	
-	8,8,8,8,8,8,8,8,8,8,
-	8,8,8,8,4,
-]
+		crazy_frog_tempo = [
+			2,4,4,8,4,4,4,
+			2,4,4,8,4,4,4,
+			4,4,4,8,4,8,4,4,
+			1,4,
+			
+			2,4,4,8,4,4,4,
+			2,4,4,8,4,4,4,
+			4,4,4,8,4,8,4,4,
+			1,4,
+			
+			8,4,4,4,
+			
+			2,4,4,8,4,4,4,
+			2,4,4,8,4,4,4,
+			4,4,4,8,4,8,4,4,
+			1,
+		]
+		self.play(crazy_frog_melody, crazy_frog_tempo, 0.30, 0.900)
 
-twinkle_twinkle_melody = [
-	notes['C4'], notes['C4'], notes['G4'], notes['G4'], notes['A4'], notes['A4'], notes['G4'],
-	notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'], notes['D4'], notes['C4'],
-	
-	notes['G4'], notes['G4'], notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'],
-	notes['G4'], notes['G4'], notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'],
-	
-	notes['C4'], notes['C4'], notes['G4'], notes['G4'], notes['A4'], notes['A4'], notes['G4'],
-	notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'], notes['D4'], notes['C4'],
-]
+	def playDeckTheHalls(self):
+		deck_the_halls_melody = [
+			notes['G5'], notes['F5'], notes['E5'], notes['D5'],
+			notes['C5'], notes['D5'], notes['E5'], notes['C5'],
+			notes['D5'], notes['E5'], notes['F5'], notes['D5'], notes['E5'], notes['D5'],
+			notes['C5'], notes['B4'], notes['C5'], 0,
+			
+			notes['G5'], notes['F5'], notes['E5'], notes['D5'],
+			notes['C5'], notes['D5'], notes['E5'], notes['C5'],
+			notes['D5'], notes['E5'], notes['F5'], notes['D5'], notes['E5'], notes['D5'],
+			notes['C5'], notes['B4'], notes['C5'], 0,
+			
+			notes['D5'], notes['E5'], notes['F5'], notes['D5'],
+			notes['E5'], notes['F5'], notes['G5'], notes['D5'],
+			notes['E5'], notes['F5'], notes['G5'], notes['A5'], notes['B5'], notes['C6'],
+			notes['B5'], notes['A5'], notes['G5'], 0,
+			
+			notes['G5'], notes['F5'], notes['E5'], notes['D5'],
+			notes['C5'], notes['D5'], notes['E5'], notes['C5'],
+			notes['D5'], notes['E5'], notes['F5'], notes['D5'], notes['E5'], notes['D5'],
+			notes['C5'], notes['B4'], notes['C5'], 0,
+		]
 
-twinkle_twinkle_tempo = [
-	4,4,4,4,4,4,2,
-	4,4,4,4,4,4,2,
-	
-	4,4,4,4,4,4,2,
-	4,4,4,4,4,4,2,
-	
-	4,4,4,4,4,4,2,
-	4,4,4,4,4,4,2,
-]
+		deck_the_halls_tempo = [
+			2, 4, 2, 2,
+			2, 2, 2, 2,
+			4, 4, 4, 4, 2, 4,
+			2, 2, 2, 2,
+			
+			2, 4, 2, 2,
+			2, 2, 2, 2,
+			4, 4, 4, 4, 2, 4,
+			2, 2, 2, 2,
+			
+			2,4,2,2,
+			2,4,2,2,
+			4,4,2,4,4,2,
+			2,2,2,2,
+			
+			2, 4, 2, 2,
+			2, 2, 2, 2,
+			4, 4, 4, 4, 2, 4,
+			2, 2, 2, 2,
+		]
+		self.play(deck_the_halls_melody, deck_the_halls_tempo, 0.30, 0.800)
 
-crazy_frog_melody = [
-	notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'], 
-	notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
-	notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'], 
-	notes['A4'],0,
-	
-	notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'], 
-	notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
-	notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'], 
-	notes['A4'],0,
-	
-	
-	notes['A3'], notes['G3'], notes['E3'], notes['D3'],
-	
-	notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'], 
-	notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
-	notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'], 
-	notes['A4'],
-]
+	def playManaderna(self):
+		manaderna_melody = [
+			notes['E4'],notes['E4'],notes['F4'],notes['G4'],
+			notes['G4'],notes['F4'],notes['E4'],notes['D4'],
+			notes['C4'],notes['C4'],notes['D4'],notes['E4'],
+			notes['E4'],0,notes['D4'],notes['D4'],0,
+			
+			notes['E4'],notes['E4'],notes['F4'],notes['G4'],
+			notes['G4'],notes['F4'],notes['E4'],notes['D4'],
+			notes['C4'],notes['C4'],notes['D4'],notes['E4'],
+			notes['D4'],0,notes['C4'],notes['C4'],0,
+			
+			notes['D4'],notes['D4'],notes['E4'],notes['C4'],
+			notes['D4'],notes['E4'],notes['F4'],notes['E4'],notes['C4'],
+			notes['D4'],notes['E4'],notes['F4'],notes['E4'],notes['D4'],
+			notes['C4'],notes['D4'],notes['G3'],0,
+			
+			notes['E4'],notes['E4'],notes['F4'],notes['G4'],
+			notes['G4'],notes['F4'],notes['E4'],notes['D4'],
+			notes['C4'],notes['C4'],notes['D4'],notes['E4'],
+			notes['D4'],0,notes['C4'],notes['C4'],
+		]
 
-crazy_frog_tempo = [
-	2,4,4,8,4,4,4,
-	2,4,4,8,4,4,4,
-	4,4,4,8,4,8,4,4,
-	1,4,
-	
-	2,4,4,8,4,4,4,
-	2,4,4,8,4,4,4,
-	4,4,4,8,4,8,4,4,
-	1,4,
-	
-	8,4,4,4,
-	
-	2,4,4,8,4,4,4,
-	2,4,4,8,4,4,4,
-	4,4,4,8,4,8,4,4,
-	1,
-]
+		manaderna_tempo = [
+			2,2,2,2,
+			2,2,2,2,
+			2,2,2,2,
+			2,4,4,2,4,
+			
+			2,2,2,2,
+			2,2,2,2,
+			2,2,2,2,
+			2,4,4,2,4,
+			
+			2,2,2,2,
+			2,4,4,2,2,
+			2,4,4,2,2,
+			2,2,1,4,
+			
+			2,2,2,2,
+			2,2,2,2,
+			2,2,2,2,
+			2,4,4,2,
+		]
+		self.play(manaderna_melody, manaderna_tempo, 0.30, 0.800)
 
-deck_the_halls_melody = [
-	notes['G5'], notes['F5'], notes['E5'], notes['D5'],
-	notes['C5'], notes['D5'], notes['E5'], notes['C5'],
-	notes['D5'], notes['E5'], notes['F5'], notes['D5'], notes['E5'], notes['D5'],
-	notes['C5'], notes['B4'], notes['C5'], 0,
-	
-	notes['G5'], notes['F5'], notes['E5'], notes['D5'],
-	notes['C5'], notes['D5'], notes['E5'], notes['C5'],
-	notes['D5'], notes['E5'], notes['F5'], notes['D5'], notes['E5'], notes['D5'],
-	notes['C5'], notes['B4'], notes['C5'], 0,
-	
-	notes['D5'], notes['E5'], notes['F5'], notes['D5'],
-	notes['E5'], notes['F5'], notes['G5'], notes['D5'],
-	notes['E5'], notes['F5'], notes['G5'], notes['A5'], notes['B5'], notes['C6'],
-	notes['B5'], notes['A5'], notes['G5'], 0,
-	
-	notes['G5'], notes['F5'], notes['E5'], notes['D5'],
-	notes['C5'], notes['D5'], notes['E5'], notes['C5'],
-	notes['D5'], notes['E5'], notes['F5'], notes['D5'], notes['E5'], notes['D5'],
-	notes['C5'], notes['B4'], notes['C5'], 0,
-]
+	def playBonnagard(self):
+		bonnagard_melody = [
+			notes['C5'],notes['C5'],notes['C5'],notes['G4'],
+			notes['A4'],notes['A4'],notes['G4'],
+			notes['E5'],notes['E5'],notes['D5'],notes['D5'],
+			notes['C5'],0,notes['G4'],
+			
+			notes['C5'],notes['C5'],notes['C5'],notes['G4'],
+			notes['A4'],notes['A4'],notes['G4'],
+			notes['E5'],notes['E5'],notes['D5'],notes['D5'],
+			notes['C5'],0,notes['G4'],notes['G4'],
+			
+			notes['C5'],notes['C5'],notes['C5'],notes['G4'],notes['G4'],
+			notes['C5'],notes['C5'],notes['G4'],
+			notes['C5'],notes['C5'],notes['C5'],notes['C5'],notes['C5'],notes['C5'],
+			notes['C5'],notes['C5'],notes['C5'],notes['C5'],notes['C5'],notes['C5'],0,
+			
+			notes['C5'],notes['C5'],notes['C5'],notes['G4'],
+			notes['A4'],notes['A4'],notes['G4'],
+			notes['E5'],notes['E5'],notes['D5'],notes['D5'],
+			notes['C5'],0,
+		]
 
-deck_the_halls_tempo = [
-	2, 4, 2, 2,
-	2, 2, 2, 2,
-	4, 4, 4, 4, 2, 4,
-	2, 2, 2, 2,
-	
-	2, 4, 2, 2,
-	2, 2, 2, 2,
-	4, 4, 4, 4, 2, 4,
-	2, 2, 2, 2,
-	
-	2,4,2,2,
-	2,4,2,2,
-	4,4,2,4,4,2,
-	2,2,2,2,
-	
-	2, 4, 2, 2,
-	2, 2, 2, 2,
-	4, 4, 4, 4, 2, 4,
-	2, 2, 2, 2,
-]
+		bonnagard_tempo = [
+			2,2,2,2,
+			2,2,1,
+			2,2,2,2,
+			1,2,2,
+			
+			2,2,2,2,
+			2,2,1,
+			2,2,2,2,
+			1,2,4,4,
+			
+			2,2,2,4,4,
+			2,2,1,
+			4,4,2,4,4,2,
+			4,4,4,4,2,2,4,
+			
+			2,2,2,2,
+			2,2,1,
+			2,2,2,2,
+			1,1,
+		]
+		self.play(bonnagard_melody, bonnagard_tempo, 0.30, 0.800)
 
-manaderna_melody = [
-	notes['E4'],notes['E4'],notes['F4'],notes['G4'],
-	notes['G4'],notes['F4'],notes['E4'],notes['D4'],
-	notes['C4'],notes['C4'],notes['D4'],notes['E4'],
-	notes['E4'],0,notes['D4'],notes['D4'],0,
-	
-	notes['E4'],notes['E4'],notes['F4'],notes['G4'],
-	notes['G4'],notes['F4'],notes['E4'],notes['D4'],
-	notes['C4'],notes['C4'],notes['D4'],notes['E4'],
-	notes['D4'],0,notes['C4'],notes['C4'],0,
-	
-	notes['D4'],notes['D4'],notes['E4'],notes['C4'],
-	notes['D4'],notes['E4'],notes['F4'],notes['E4'],notes['C4'],
-	notes['D4'],notes['E4'],notes['F4'],notes['E4'],notes['D4'],
-	notes['C4'],notes['D4'],notes['G3'],0,
-	
-	notes['E4'],notes['E4'],notes['F4'],notes['G4'],
-	notes['G4'],notes['F4'],notes['E4'],notes['D4'],
-	notes['C4'],notes['C4'],notes['D4'],notes['E4'],
-	notes['D4'],0,notes['C4'],notes['C4'],
-]
+	def playFinalCountdown(self):
+		final_countdown_melody = [
+			notes['A3'],notes['E5'],notes['D5'],notes['E5'],notes['A4'],
+			notes['F3'],notes['F5'],notes['E5'],notes['F5'],notes['E5'],notes['D5'],
+			notes['D3'],notes['F5'],notes['E5'],notes['F5'],notes['A4'],
+			notes['G3'],0,notes['D5'],notes['C5'],notes['D5'],notes['C5'],notes['B4'],notes['D5'],
+			notes['C5'],notes['A3'],notes['E5'],notes['D5'],notes['E5'],notes['A4'],
+			notes['F3'],notes['F5'],notes['E5'],notes['F5'],notes['E5'],notes['D5'],
+			notes['D3'],notes['F5'],notes['E5'],notes['F5'],notes['A4'],
+			notes['G3'],0,notes['D5'],notes['C5'],notes['D5'],notes['C5'],notes['B4'],notes['D5'],
+			notes['C5'],notes['B4'],notes['C5'],notes['D5'],notes['C5'],notes['D5'],
+			notes['E5'],notes['D5'],notes['C5'],notes['B4'],notes['A4'],notes['F5'],
+			notes['E5'],notes['E5'],notes['F5'],notes['E5'],notes['D5'],
+			notes['E5'],
+		]
 
-manaderna_tempo = [
-	2,2,2,2,
-	2,2,2,2,
-	2,2,2,2,
-	2,4,4,2,4,
-	
-	2,2,2,2,
-	2,2,2,2,
-	2,2,2,2,
-	2,4,4,2,4,
-	
-	2,2,2,2,
-	2,4,4,2,2,
-	2,4,4,2,2,
-	2,2,1,4,
-	
-	2,2,2,2,
-	2,2,2,2,
-	2,2,2,2,
-	2,4,4,2,
-]
-
-bonnagard_melody = [
-	notes['C5'],notes['C5'],notes['C5'],notes['G4'],
-	notes['A4'],notes['A4'],notes['G4'],
-	notes['E5'],notes['E5'],notes['D5'],notes['D5'],
-	notes['C5'],0,notes['G4'],
-	
-	notes['C5'],notes['C5'],notes['C5'],notes['G4'],
-	notes['A4'],notes['A4'],notes['G4'],
-	notes['E5'],notes['E5'],notes['D5'],notes['D5'],
-	notes['C5'],0,notes['G4'],notes['G4'],
-	
-	notes['C5'],notes['C5'],notes['C5'],notes['G4'],notes['G4'],
-	notes['C5'],notes['C5'],notes['G4'],
-	notes['C5'],notes['C5'],notes['C5'],notes['C5'],notes['C5'],notes['C5'],
-	notes['C5'],notes['C5'],notes['C5'],notes['C5'],notes['C5'],notes['C5'],0,
-	
-	notes['C5'],notes['C5'],notes['C5'],notes['G4'],
-	notes['A4'],notes['A4'],notes['G4'],
-	notes['E5'],notes['E5'],notes['D5'],notes['D5'],
-	notes['C5'],0,
-]
-
-bonnagard_tempo = [
-	2,2,2,2,
-	2,2,1,
-	2,2,2,2,
-	1,2,2,
-	
-	2,2,2,2,
-	2,2,1,
-	2,2,2,2,
-	1,2,4,4,
-	
-	2,2,2,4,4,
-	2,2,1,
-	4,4,2,4,4,2,
-	4,4,4,4,2,2,4,
-	
-	2,2,2,2,
-	2,2,1,
-	2,2,2,2,
-	1,1,
-]
-
-final_countdown_melody = [
-	notes['A3'],notes['E5'],notes['D5'],notes['E5'],notes['A4'],
-	notes['F3'],notes['F5'],notes['E5'],notes['F5'],notes['E5'],notes['D5'],
-	notes['D3'],notes['F5'],notes['E5'],notes['F5'],notes['A4'],
-	notes['G3'],0,notes['D5'],notes['C5'],notes['D5'],notes['C5'],notes['B4'],notes['D5'],
-	notes['C5'],notes['A3'],notes['E5'],notes['D5'],notes['E5'],notes['A4'],
-	notes['F3'],notes['F5'],notes['E5'],notes['F5'],notes['E5'],notes['D5'],
-	notes['D3'],notes['F5'],notes['E5'],notes['F5'],notes['A4'],
-	notes['G3'],0,notes['D5'],notes['C5'],notes['D5'],notes['C5'],notes['B4'],notes['D5'],
-	notes['C5'],notes['B4'],notes['C5'],notes['D5'],notes['C5'],notes['D5'],
-	notes['E5'],notes['D5'],notes['C5'],notes['B4'],notes['A4'],notes['F5'],
-	notes['E5'],notes['E5'],notes['F5'],notes['E5'],notes['D5'],
-	notes['E5'],
-]
-
-final_countdown_tempo = [
-	1,16,16,4,4,
-	1,16,16,8,8,4,
-	1,16,16,4,4,
-	2,4,16,16,8,8,8,8,
-	4,4,16,16,4,4,
-	1,16,16,8,8,4,
-	1,16,16,4,4,
-	2,4,16,16,8,8,8,8,
-	4,16,16,4,16,16,
-	8,8,8,8,4,4,
-	2,8,4,16,16,
-	1,
-]
-"""
-"""
-	# Songs with tempo ...:
-
-	print("The Final Countdown")
-	play(final_countdown_melody, final_countdown_tempo, 0.30, 1.2000)
-	time.sleep(2)
-	print("Per Olssons Bonnagard (Old MacDonald Had A Farm) Melody")
-	play(bonnagard_melody, bonnagard_tempo, 0.30, 0.800)
-	time.sleep(2)
-	print("Manaderna (Symphony No. 9) Melody")
-	play(manaderna_melody, manaderna_tempo, 0.30, 0.800)
-	time.sleep(2)
-	print("Deck The Halls Melody")
-	play(deck_the_halls_melody, deck_the_halls_tempo, 0.30, 0.800)
-	time.sleep(2)
-	print("Crazy Frog (Axel F) Theme")
-	play(crazy_frog_melody, crazy_frog_tempo, 0.30, 0.900)
-	time.sleep(2)
-	print("Twinkle, Twinkle, Little Star Melody")
-	play(twinkle_twinkle_melody, twinkle_twinkle_tempo, 0.50, 1.000)
-	time.sleep(2)
-	print("Popcorn Melody")
-	play(popcorn_melody, popcorn_tempo, 0.50, 1.000)
-	time.sleep(2)
-	print("Star Wars Theme")
-	play(star_wars_melody, star_wars_tempo, 0.50, 1.000)
-	play(star_wars_melody_deeper, star_wars_tempo, 0.50, 1.000)
-	time.sleep(2)
-	print("Super Mario Theme")
-	play(melody, tempo, 1.3, 0.800)
-	time.sleep(2)
-	print("Super Mario Underworld Theme")
-	play(underworld_melody, underworld_tempo, 1.3, 0.800)
-	time.sleep(2)
-	print("Adventure Time Theme")
-	play(adventure_time_melody, adventure_time_tempo, 1.3, 1.500)
-"""
+		final_countdown_tempo = [
+			1,16,16,4,4,
+			1,16,16,8,8,4,
+			1,16,16,4,4,
+			2,4,16,16,8,8,8,8,
+			4,4,16,16,4,4,
+			1,16,16,8,8,4,
+			1,16,16,4,4,
+			2,4,16,16,8,8,8,8,
+			4,16,16,4,16,16,
+			8,8,8,8,4,4,
+			2,8,4,16,16,
+			1,
+		]
+		self.play(final_countdown_melody, final_countdown_tempo, 0.30, 1.2000)
