@@ -7,7 +7,6 @@ I developed this python program in my freetime and therefore focused on integrat
 ## Current Apps
 - Alarm Clock (ft. Super Mario & Star Wars melody via the GPIO Pins of the Matrix Voice board)
 - Display the time
-- Enable Matrix-Voive-LEDs with wakeword
 
 ## Dependencies
 - Note: All the dependecies I have used are working 100% offline
