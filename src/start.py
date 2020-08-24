@@ -8,7 +8,6 @@ from Alarm_Time_Keeper.alarm_time_keeper import AlarmTimeKeeper
 from Broker.broker import Broker
 from LED_Alarm_Status.led_alarm_status import LEDAlarmStatus
 from LED_Clock.led_clock import LEDClock
-from LED_Voice_Activate.wakeword import Wakeword
 from Logger.logger_init import get_logger, setup_logging
 from MQTT_Handler.mqtt_receiver import MQTTReceiver
 from REST_API_Handler.rest_api_handler import RESTApiHandler
@@ -25,7 +24,6 @@ if __name__ == "__main__":
         AlarmStopButton(broker, PIN=0, POLLING=.125),      # Button - stop
         #AlarmSwitchButton(broker, PIN=2, POLLING=.125),    # Button - switch
         MQTTReceiver(broker),                              # MQTT
-        Wakeword(broker),                                  # LED Wakeword
         LEDClock(broker, 0, "blue", "red", "yellow"),      # LED Clock
         LEDAlarmStatus(broker),                            # LED alarm status on switch
         RESTApiHandler(broker),                            # REST-API-Handler for Home Assistant

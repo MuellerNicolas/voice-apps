@@ -34,21 +34,6 @@ class MQTTReceiver(mqtt.Client):
     def on_message(self, mqttrec, obj, msg):
         pass
 
-    def _snowboy_wakeword(self, mosq, obj, msg):
-        self._broker_notify_wakeword(mosq, obj, msg)
-
-    def _porcupine_wakeword(self, mosq, obj, msg):
-        self._broker_notify_wakeword(mosq, obj, msg)
-
-    def _broker_notify_wakeword(self, mosq, obj, msg):
-        # test if the payload is in byte format (starting with b)
-        msg_test = str(msg.payload)
-        if(msg_test[0] == 'b'):
-            # decode byte to utf-8
-            msg.payload = msg.payload.decode("utf-8")
-        # payload possibilities: loaded and the opposite: listening
-        self._broker.publish('wakeword-status', msg.payload)
-
     def _broker_notify_show_time(self, mosq, obj, msg):
         self._broker.publish('voice-show-time')
 
@@ -64,12 +49,6 @@ class MQTTReceiver(mqtt.Client):
                 Adapt the wake word topic to your specific wake word topic, which may vary 
                 by wake word engine and your country
             """
-            # Snowboy hotword
-            self.message_callback_add(
-                'rhasspy/en/transition/SnowboyWakeListener', self._snowboy_wakeword)
-            # Porcupine hotword
-            self.message_callback_add(
-                'rhasspy/en/transition/PorcupineWakeListener', self._porcupine_wakeword)
             # Time app
             self.message_callback_add(
                 'rhasspy/intent/GetTime', self._broker_notify_show_time)
