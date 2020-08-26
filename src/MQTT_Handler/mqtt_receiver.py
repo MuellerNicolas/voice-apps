@@ -34,6 +34,8 @@ class MQTTReceiver(mqtt.Client):
     def on_message(self, mqttrec, obj, msg):
         pass
 
+    def _broker_notify_wakeword(self, mosq, obj, msg):
+        self._broker.publish('wakeword-status')
     def _broker_notify_show_time(self, mosq, obj, msg):
         self._broker.publish('voice-show-time')
     def _broker_notify_led_on(self, mosq, obj, msg):
@@ -55,6 +57,8 @@ class MQTTReceiver(mqtt.Client):
                 Adapt the wake word topic to your specific wake word topic, which may vary 
                 by wake word engine and your country
             """
+            # Wakeword
+            self.message_callback_add('hermes/hotword/+/detected', self._broker_notify_wakeword)
             # Time app
             self.message_callback_add(
                 'hermes/intent/GetTime', self._broker_notify_show_time)
