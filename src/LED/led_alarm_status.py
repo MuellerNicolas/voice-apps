@@ -7,8 +7,16 @@ class LEDAlarmStatus:
     def __init__(self, broker):
         # add broker
         self._broker = broker
-        self._broker.subscribe('alarm-switch-led', self._show_status)
+        self._broker.subscribe('alarm-switch-led', self._show_alarm_status_1)
+        self._broker.subscribe('alarm-status-info-led', self._show_alarm_status_2)
 
+    def _show_alarm_status_1(self, result):
+        self._show_status(result)
+
+    def _show_alarm_status_2(self, result):
+        self._show_status(result)
+
+    
     def _show_status(self, result):
         if(result == "on"):
             self._alarm_on()

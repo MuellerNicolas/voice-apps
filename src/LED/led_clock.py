@@ -14,8 +14,11 @@ class LEDClock:
         # add broker
         self._broker = broker
         self._broker.subscribe('alarm-button-stop', self._stop_button_pressed)
-        self._broker.subscribe('voice-show-time', self._voice_show_time)
+        self._broker.subscribe('show-time', self._show_time)
         self._broker.subscribe('alarm-switch-led', self.stop_displaying)
+        self._broker.subscribe('alarm-button-info', self._display_alarm_info)
+        self._broker.subscribe('alarm-info', self._receive_alarm_info_callback)
+
         # prevents show time called multiple times
         self._clock_active = False
         # offset depending on the rotation off the materix voice module
@@ -35,23 +38,51 @@ class LEDClock:
             target=self._trigger_time, name='clock_thread', daemon=True)
         self._thread.start()
 
+        # alarm info dictionary
+        self._alarm_info = None
+
     def _stop_button_pressed(self, pressed):
         self._active_callback()
 
-    def _voice_show_time(self):
+    def _show_time(self):
         self._active_callback()
+                    
+    def _display_alarm_info(self, *args, **kwargs):
+        if(self._alarm_info != None):
+            if(self._clock_active == False):
+                # display alarm time
+                self._clock_active = True
+                self.display_specific_time(self._alarm_info["hour"], self._alarm_info["minute"])
+                # time period of displaying
+                sleep(10)
+                self.stop_displaying()
+                # display alarm status
+                self._broker.publish("alarm-status-info-led", self._alarm_info["state"])
+                sleep(5)
+                self.stop_displaying()
+                self._clock_active = False
+
+    def _receive_alarm_info_callback(self, alarm_info):
+        self._alarm_info = alarm_info    
+    
+    def display_specific_time(self, hour, minute):
+            self._set_all_black()
+            self._set_hour(hour)
+            self._hours_set = True
+            self._set_minute(minute)
+            # reset the led array & hours set
+            self._led_array = []
+            self._hours_set = False
 
     def _active_callback(self):
         # Make sure, that the button is not pressed multiple times and deactivates for each time
         if(self._clock_active == False):
-            self._broker.publish('clock-time', 'start')
             self._clock_active = True
             self.display_time()
             # time period of displaying
             sleep(10)
             self.stop_displaying()
             self._clock_active = False
-            self._broker.publish('clock-time', 'stop')
 
     def close(self):
         self._thread_flag.set()

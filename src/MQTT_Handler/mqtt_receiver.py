@@ -37,13 +37,19 @@ class MQTTReceiver(mqtt.Client):
     def _broker_notify_wakeword(self, mosq, obj, msg):
         self._broker.publish('wakeword-status')
     def _broker_notify_show_time(self, mosq, obj, msg):
-        self._broker.publish('voice-show-time')
+        self._broker.publish('show-time')
     def _broker_notify_led_on(self, mosq, obj, msg):
         self._broker.publish('led-on')
     def _broker_notify_led_rainbow(self, mosq, obj, msg):
         self._broker.publish('led-rainbow')
     def _broker_notify_led_off(self, mosq, obj, msg):
         self._broker.publish('led-off')
+    def _broker_notify_get_alarm_state(self, mosq, obj, msg):
+        self._broker.publish('trigger-button-alarm-info')
+    def _broker_notify_get_alarm_time(self, mosq, obj, msg):
+        self._broker.publish('trigger-button-alarm-info')
+    def _broker_notify_get_alarm_info(self, mosq, obj, msg):
+        self._broker.publish('trigger-button-alarm-info')
         
     def _run(self):
         # ensure the mqtt-broker is already running
@@ -71,6 +77,15 @@ class MQTTReceiver(mqtt.Client):
             # turn led off
             self.message_callback_add(
                 'hermes/intent/LedOff', self._broker_notify_led_off)
+            # get alarm status
+            self.message_callback_add(
+                'hermes/intent/AlarmState', self._broker_notify_get_alarm_state)
+            # get alarm time
+            self.message_callback_add(
+                'hermes/intent/AlarmTime', self._broker_notify_get_alarm_time)
+            # get alarm info
+            self.message_callback_add(
+                'hermes/intent/AlarmInfo', self._broker_notify_get_alarm_time)
             # error (bzw. rc) zeigt den Status des Verbindungsverlustes an
             # returned error > 0 dann ist ein Fehler aufgtreten
             error = 0
