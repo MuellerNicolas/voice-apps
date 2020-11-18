@@ -18,6 +18,7 @@ I developed this python program in my freetime and therefore focused on integrat
 - Use the stop/time button to stop the alarm if the alarm is active or just show the time
 - The alarm can also be stopped by saying rhasspy's wakeword (in my case Jarvis)
 - **Important: The MQTT Topic for the wake word detection has to be adapted depending on your wake word engine and language**
+- **Wakeword LEDs are not support in the current version, check out [HermesLedControl](https://github.com/project-alice-assistant/HermesLedControl) for a nice alternative**
 - The functionality of rhasspy should be fully maintained
 
 ## Hardware
