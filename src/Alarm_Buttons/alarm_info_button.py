@@ -39,13 +39,14 @@ class AlarmInfoButton:
         self._thread_button_flag.set()
 
     def _triggered(self):
+        self.alarm_info_received = False
         get_logger(__name__).info(f'Get info about alarm')
         self._broker.publish('alarm-request-info')
         timestamp = time()
-        while (not self.alarm_info_received and time() - timestamp < 30):
+        while(not self.alarm_info_received and time() - timestamp < 30):
             sleep(0.250)
-
-
+        # handler has to inform the clock about the new time first
+        
     def _check_pressed(self):
         try:
             while True:

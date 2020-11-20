@@ -10,15 +10,15 @@ from Logger.logger_init import get_logger
 
 class AlarmSound:
 	def __init__(self, broker, PIN_SONG, PIN_BEEP):
-		self.broker = broker
-		broker.subscribe("alarm-beep", self._beep)
+		self._broker = broker
+		self._broker.subscribe("alarm-beep", self._beep)
 		# stop the alarm on analog button press
-		broker.subscribe("alarm-button-stop", self._stopAlarm)
-		broker.subscribe("alarm-snooze", self._stopAlarm)
+		self._broker.subscribe("alarm-button-stop", self._stopAlarm)
+		self._broker.subscribe("alarm-snooze", self._stopAlarm)
 		# stop the alarm if a wakeword was detected or the wakeword is starting to listen
-		broker.subscribe("wakeword-status", self._stopAlarm)
+		self._broker.subscribe("wakeword-status", self._stopAlarm)
 		# select the song for the passive buzzer
-		broker.subscribe("alarm-song-selected", self._select_alarm_song_cb)
+		self._broker.subscribe("alarm-song-selected", self._select_alarm_song_cb)
 		self._thread_buzzer_flag = None
 		# flag to stop the sound
 		self._continue_beep = True
@@ -95,6 +95,10 @@ class AlarmSound:
 			self._continue_beep = True
 			gpio.setDigital(self._PIN_BEEP, 'OFF')
 			gpio.setDigital(self._PIN_SONG, 'OFF')
+   
+		# display the time
+		sleep(5)
+		self._broker.publish('alarm-button-stop', 'voice-triggered')
 
 	def _beep(self, *args, **kwargs):
 		if(self._last_minute_active == False):

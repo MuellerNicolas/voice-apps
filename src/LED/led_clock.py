@@ -63,7 +63,7 @@ class LEDClock:
                 self._clock_active = False
 
     def _receive_alarm_info_callback(self, alarm_info):
-        self._alarm_info = alarm_info    
+        self._alarm_info = alarm_info
     
     def display_specific_time(self, hour, minute):
             self._set_all_black()
