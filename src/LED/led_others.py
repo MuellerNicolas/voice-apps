@@ -20,7 +20,7 @@ class LEDOthers:
             led.set('white')
             sleep(5)
             led.set('white')
-            sleep(60)
+            sleep(180)
         finally:
             led.set('black')
 
