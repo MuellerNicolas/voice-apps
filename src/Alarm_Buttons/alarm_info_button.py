@@ -30,22 +30,21 @@ class AlarmInfoButton:
             
     def _triggered_button_alarm_info(self, *args, **kwargs):
         self._triggered()
-        # sleep(6)
         if(self.alarm_info_received):
+            # wait till wakeword activated led goes off
+            sleep(1.5)
             self._broker.publish('alarm-button-info', 'pressed')
-            self.alarm_info_received = False
 
     def close(self):
         self._thread_button_flag.set()
 
     def _triggered(self):
-        self.alarm_info_received = False
-        get_logger(__name__).info(f'Get info about alarm')
-        self._broker.publish('alarm-request-info')
-        timestamp = time()
-        while(not self.alarm_info_received and time() - timestamp < 30):
-            sleep(0.250)
-        # handler has to inform the clock about the new time first
+        if not(self.alarm_info_received):
+            self._broker.publish('alarm-request-info')
+            timestamp = time()
+            while(not self.alarm_info_received and time() - timestamp < 30):
+                sleep(0.250)
+            # handler has to inform the clock about the new time first
         
     def _check_pressed(self):
         try:
@@ -60,12 +59,9 @@ class AlarmInfoButton:
                     # led effect
                     if(self.alarm_info_received):
                         self._broker.publish('alarm-button-info', 'pressed')
-                        self.alarm_info_received = False
                     sleep(15)
-
         except:
             get_logger(__name__).error(f'Error in Thread Info Button')
         finally:
-            self.alarm_info_received = False
             self.close()
             

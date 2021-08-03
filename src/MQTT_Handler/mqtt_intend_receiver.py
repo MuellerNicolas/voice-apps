@@ -7,12 +7,12 @@ import paho.mqtt.client as mqtt
 from Logger.logger_init import get_logger
 from time import sleep
 
-class MQTTReceiver(mqtt.Client):
+class MQTTIntendReceiver(mqtt.Client):
     def __init__(self, broker):
         super().__init__()
         self._broker = broker
         # read mqtt setting 4 connection
-        path = os.path.join(os.path.dirname(__file__), 'mqtt_settings.json')
+        path = os.path.join(os.path.dirname(__file__), 'mqtt_intend_settings.json')
         with open(path) as f:
             mqtt_settings = json.load(f)
         self._ip_adress = mqtt_settings["ip"]   # usually 192.168.178.19

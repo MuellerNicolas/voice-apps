@@ -26,19 +26,19 @@ class AlarmTimeKeeper:
 
     def _time_polling(self):
         try:
+            sleep(120)
             while True:
                 hour = datetime.now().hour
                 minute = datetime.now().minute
                 if(self._alarm_info == None):
+                    # if alarm infos were not received via mqtt, try get it via http
+                    self._initiateApiGet()
                     # if no infos received wake me up at 6:00 am
                     if(hour == 6 and minute == 0):
                         self._alarmClockWakeup()
                 elif(self._alarm_info["state"] == "on"):
                     if(hour == self._alarm_info["hour"] and minute == self._alarm_info["minute"]):
                         self._alarmClockWakeup()
-                # Initiate a http request every 15 minutes
-                if(minute == 15 or minute == 30 or minute == 45):
-                    self._initiateApiGet()
                 # Polling rate
                 sleep(45)
         except:
@@ -51,6 +51,7 @@ class AlarmTimeKeeper:
             self._alarmClockWakeup()
 
     def _receive_alarm_info_callback(self, alarm_info):
+        get_logger(__name__).info(f'received alarm_info={alarm_info}')
         self._alarm_info = alarm_info
 
     def _alarmClockWakeup(self):

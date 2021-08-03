@@ -11,7 +11,8 @@ from LED.led_alarm_status import LEDAlarmStatus
 from LED.led_clock import LEDClock
 from LED.led_others import LEDOthers
 from Logger.logger_init import get_logger, setup_logging
-from MQTT_Handler.mqtt_receiver import MQTTReceiver
+from MQTT_Handler.mqtt_intend_receiver import MQTTIntendReceiver
+from MQTT_Handler.mqtt_home_assistant_receiver import MQTTHomeAssistantReceiver
 from REST_API_Handler.rest_api_handler import RESTApiHandler
 
 if __name__ == "__main__":
@@ -26,12 +27,13 @@ if __name__ == "__main__":
         AlarmStopButton(broker, PIN=0, POLLING=.125),      # Button - stop
         AlarmInfoButton(broker, PIN=2, POLLING=.125),      # Button - info
         #AlarmSwitchButton(broker, PIN=2, POLLING=.125),    # Button - switch
-        MQTTReceiver(broker),                              # MQTT
         LEDClock(broker, 0, "blue", "red", "yellow"),      # LED Clock
         LEDAlarmStatus(broker),                            # LED alarm status on switch
         LEDOthers(broker),                                 # LED other stuff like lights or rainbow
         RESTApiHandler(broker),                            # REST-API-Handler for Home Assistant
         AlarmTimeKeeper(broker),                           # Time Keeper
+        MQTTHomeAssistantReceiver(broker),                 # MQTT Receiver from Home Assistant
+        MQTTIntendReceiver(broker),                        # MQTT Receiver from mqtt-Broker of Rhasspy
     ]
 
 

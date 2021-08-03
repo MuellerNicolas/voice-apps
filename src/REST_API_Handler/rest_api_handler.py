@@ -35,10 +35,9 @@ class RESTApiHandler:
         self._broker.subscribe("alarm-button-switch", self._set_alarm_state)
 
         # Thread
-        self._threadActive = True
+        self._threadActive = False
         self._thread_flag = threading.Event()
         self._thread = threading.Thread(target= self._http_polling, name = 'REST-API-Thread', daemon = True)
-        self._thread.start()
 
     def close(self):
         self._thread_flag.set()
@@ -68,7 +67,7 @@ class RESTApiHandler:
                     if(song.status_code == 200):
                         alarm_song = self._format_alarm_song(song)
                         self._broker.publish('alarm-song-selected', alarm_song)
-                    get_logger(__name__).info(f'Successfully received alarm infos!')
+                    get_logger(__name__).info(f'Successfully received alarm_info={alarm_info}, alarm_song={alarm_song}')
                     # Request was successful, stop the thread
                     return
                 sleep(10)
