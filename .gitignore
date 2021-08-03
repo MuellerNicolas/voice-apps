@@ -207,6 +207,7 @@ dmypy.json
 
 # Ignore HA Authorization:
 Home_Assistant_Authorization.json
+MQTT_Home_Assistant_Authorization.json
 
 # Ignore logs:
 errors.log
