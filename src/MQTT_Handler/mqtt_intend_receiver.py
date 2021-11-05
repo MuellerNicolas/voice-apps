@@ -7,17 +7,21 @@ import paho.mqtt.client as mqtt
 from Logger.logger_init import get_logger
 from time import sleep
 
+
 class MQTTIntendReceiver(mqtt.Client):
     def __init__(self, broker):
         super().__init__()
         self._broker = broker
+        # Callback to active Hotword on button press
+        self._broker.subscribe("alarm-button-stop", self._unmute)
         # read mqtt setting 4 connection
-        path = os.path.join(os.path.dirname(__file__), 'mqtt_intend_settings.json')
+        path = os.path.join(os.path.dirname(__file__),
+                            'mqtt_intend_settings.json')
         with open(path) as f:
             mqtt_settings = json.load(f)
         self._ip_adress = mqtt_settings["ip"]   # usually 192.168.178.19
         self._port = mqtt_settings["port"]  # usually 1883
-        #setup logging
+        # setup logging
         self.enable_logger(get_logger(__name__))
         # Thread zum empfangen der MQTT Nachrichten
         self._thread_flag = threading.Event()
@@ -36,21 +40,36 @@ class MQTTIntendReceiver(mqtt.Client):
 
     def _broker_notify_wakeword(self, mosq, obj, msg):
         self._broker.publish('wakeword-status')
+
     def _broker_notify_show_time(self, mosq, obj, msg):
         self._broker.publish('show-time')
+
     def _broker_notify_led_on(self, mosq, obj, msg):
         self._broker.publish('led-on')
+
     def _broker_notify_led_rainbow(self, mosq, obj, msg):
         self._broker.publish('led-rainbow')
+
     def _broker_notify_led_off(self, mosq, obj, msg):
         self._broker.publish('led-off')
+
     def _broker_notify_get_alarm_state(self, mosq, obj, msg):
         self._broker.publish('trigger-button-alarm-info')
+
     def _broker_notify_get_alarm_time(self, mosq, obj, msg):
         self._broker.publish('trigger-button-alarm-info')
+
     def _broker_notify_get_alarm_info(self, mosq, obj, msg):
         self._broker.publish('trigger-button-alarm-info')
-        
+
+    # Active Hotword
+    def _unmute(self, *args, **kwargs):
+        topic = "hermes/hotword/toggleOn"
+        payload = '{"siteId": "default", "reason": ""}'
+        qos = 0
+        retain = False
+        self.publish(topic, payload=payload, qos=qos, retain=retain)
+
     def _run(self):
         # ensure the mqtt-broker is already running
         sleep(30)
@@ -64,7 +83,8 @@ class MQTTIntendReceiver(mqtt.Client):
                 by wake word engine and your country
             """
             # Wakeword
-            self.message_callback_add('hermes/hotword/+/detected', self._broker_notify_wakeword)
+            self.message_callback_add(
+                'hermes/hotword/+/detected', self._broker_notify_wakeword)
             # Time app
             self.message_callback_add(
                 'hermes/intent/GetTime', self._broker_notify_show_time)
