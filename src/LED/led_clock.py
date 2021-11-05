@@ -46,33 +46,35 @@ class LEDClock:
 
     def _show_time(self):
         self._active_callback()
-                    
+
     def _display_alarm_info(self, *args, **kwargs):
         if(self._alarm_info != None):
             if(self._clock_active == False):
                 # display alarm time
                 self._clock_active = True
-                self.display_specific_time(self._alarm_info["hour"], self._alarm_info["minute"])
+                self.display_specific_time(
+                    self._alarm_info["hour"], self._alarm_info["minute"])
                 # time period of displaying
                 sleep(10)
                 self.stop_displaying()
                 # display alarm status
-                self._broker.publish("alarm-status-info-led", self._alarm_info["state"])
+                self._broker.publish(
+                    "alarm-status-info-led", self._alarm_info["state"])
                 sleep(5)
                 self.stop_displaying()
                 self._clock_active = False
 
     def _receive_alarm_info_callback(self, alarm_info):
         self._alarm_info = alarm_info
-    
+
     def display_specific_time(self, hour, minute):
-            self._set_all_black()
-            self._set_hour(hour)
-            self._hours_set = True
-            self._set_minute(minute)
-            # reset the led array & hours set
-            self._led_array = []
-            self._hours_set = False
+        self._set_all_black()
+        self._set_hour(hour)
+        self._hours_set = True
+        self._set_minute(minute)
+        # reset the led array & hours set
+        self._led_array = []
+        self._hours_set = False
 
     def _active_callback(self):
         # Make sure, that the button is not pressed multiple times and deactivates for each time

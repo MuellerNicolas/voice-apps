@@ -1,6 +1,6 @@
 {
-    "authorization": "Bearer... / Additional info: https://developers.home-assistant.io/docs/external_api_rest/",
-    "url_time": "http://YOUR_IP_ADRESS:8123/api/states/input_datetime.alarm_time",
-    "url_state": "http://YOUR_IP_ADRESS:8123/api/states/input_boolean.alarm_wakeup",
-    "url_song": "http://YOUR_IP_ADRESS.21:8123/api/states/input_select.alarm_songs"
+  "authorization": "Bearer... / Additional info: https://developers.home-assistant.io/docs/external_api_rest/",
+  "url_time": "http://YOUR_IP_ADRESS:8123/api/states/input_datetime.alarm_time",
+  "url_state": "http://YOUR_IP_ADRESS:8123/api/states/input_boolean.alarm_wakeup",
+  "url_song": "http://YOUR_IP_ADRESS.21:8123/api/states/input_select.alarm_songs"
 }

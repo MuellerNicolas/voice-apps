@@ -17,25 +17,30 @@ from REST_API_Handler.rest_api_handler import RESTApiHandler
 
 if __name__ == "__main__":
     # Setup logging
-    setup_logging(default_filename = 'logging_config.json')
+    setup_logging(default_filename='logging_config.json')
     get_logger(__name__).info(f'voice-apps started!')
     # Central broker
     broker = Broker()
     # array including all components
     thread_objects = [
-        AlarmSound(broker, PIN_SONG=6, PIN_BEEP=4),        # Alarm sound - PIN-SONG = Passive Buzzer / PIN_BEEP = Active Buzzer
+        # Alarm sound - PIN-SONG = Passive Buzzer / PIN_BEEP = Active Buzzer
+        AlarmSound(broker, PIN_SONG=6, PIN_BEEP=4),
         AlarmStopButton(broker, PIN=0, POLLING=.125),      # Button - stop
         AlarmInfoButton(broker, PIN=2, POLLING=.125),      # Button - info
-        #AlarmSwitchButton(broker, PIN=2, POLLING=.125),    # Button - switch
+        # AlarmSwitchButton(broker, PIN=2, POLLING=.125),    # Button - switch
         LEDClock(broker, 0, "blue", "red", "yellow"),      # LED Clock
-        LEDAlarmStatus(broker),                            # LED alarm status on switch
-        LEDOthers(broker),                                 # LED other stuff like lights or rainbow
-        RESTApiHandler(broker),                            # REST-API-Handler for Home Assistant
+        # LED alarm status on switch
+        LEDAlarmStatus(broker),
+        # LED other stuff like lights or rainbow
+        LEDOthers(broker),
+        # REST-API-Handler for Home Assistant
+        RESTApiHandler(broker),
         AlarmTimeKeeper(broker),                           # Time Keeper
-        MQTTHomeAssistantReceiver(broker),                 # MQTT Receiver from Home Assistant
-        MQTTIntendReceiver(broker),                        # MQTT Receiver from mqtt-Broker of Rhasspy
+        # MQTT Receiver from Home Assistant
+        MQTTHomeAssistantReceiver(broker),
+        # MQTT Receiver from mqtt-Broker of Rhasspy
+        MQTTIntendReceiver(broker),
     ]
-
 
     try:
         while(True):

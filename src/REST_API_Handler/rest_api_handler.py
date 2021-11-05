@@ -17,7 +17,8 @@ class RESTApiHandler:
             and replace the filename below
         """
         # get the home assistant authorization key
-        path = os.path.join(os.path.dirname(__file__), 'Home_Assistant_Authorization.json')
+        path = os.path.join(os.path.dirname(__file__),
+                            'Home_Assistant_Authorization.json')
         with open(path) as f:
             home_assistant = json.load(f)
         self._headers = {
@@ -31,13 +32,15 @@ class RESTApiHandler:
         }
         # Broker
         self._broker = broker
-        self._broker.subscribe("alarm-request-info", self._initiate_request_callback)
+        self._broker.subscribe("alarm-request-info",
+                               self._initiate_request_callback)
         self._broker.subscribe("alarm-button-switch", self._set_alarm_state)
 
         # Thread
         self._threadActive = False
         self._thread_flag = threading.Event()
-        self._thread = threading.Thread(target= self._http_polling, name = 'REST-API-Thread', daemon = True)
+        self._thread = threading.Thread(
+            target=self._http_polling, name='REST-API-Thread', daemon=True)
 
     def close(self):
         self._thread_flag.set()
@@ -55,7 +58,8 @@ class RESTApiHandler:
                 # because the alarm will work without it
                 # Check if the request was successful
                 if(time.status_code != 200 or state.status_code != 200):
-                    get_logger(__name__).warn(f'GET Request failed with code {time.status_code}!')
+                    get_logger(__name__).warn(
+                        f'GET Request failed with code {time.status_code}!')
                     # Not successful, go on threading
                     self._thread_flag.set()
                 else:
@@ -67,7 +71,8 @@ class RESTApiHandler:
                     if(song.status_code == 200):
                         alarm_song = self._format_alarm_song(song)
                         self._broker.publish('alarm-song-selected', alarm_song)
-                    get_logger(__name__).info(f'Successfully received alarm_info={alarm_info}, alarm_song={alarm_song}')
+                    get_logger(__name__).info(
+                        f'Successfully received alarm_info={alarm_info}, alarm_song={alarm_song}')
                     # Request was successful, stop the thread
                     return
                 sleep(10)
@@ -80,17 +85,17 @@ class RESTApiHandler:
             self._threadActive = False
 
     def _get_alarm_time(self):
-        time = get(self._urls["url_time"], headers = self._headers)
+        time = get(self._urls["url_time"], headers=self._headers)
         return time
 
     def _get_alarm_state(self):
-        state = get(self._urls["url_state"], headers = self._headers)
+        state = get(self._urls["url_state"], headers=self._headers)
         return state
 
     def _get_alarm_song(self):
-        song = get(self._urls["url_song"], headers = self._headers)
+        song = get(self._urls["url_song"], headers=self._headers)
         return song
-    
+
     def _format_alarm_song(self, song):
         song = song.json()
         return song["state"]
@@ -106,7 +111,7 @@ class RESTApiHandler:
         state = state.json()
         alarm_info["state"] = state["state"]
         return alarm_info
-    
+
     def _set_alarm_state(self, info):
         # execute on alarm-switch-button push
         time = self._get_alarm_time()
@@ -115,7 +120,8 @@ class RESTApiHandler:
         # Switch alarm state
         if(alarm_info["state"] == "on"):
             # switch the alarm off
-            state_response = post(self._urls["url_state"], headers = self._headers, json = {"state": "off"})
+            state_response = post(
+                self._urls["url_state"], headers=self._headers, json={"state": "off"})
             # update the dictionary sent to the timekeeper
             alarm_info = self._format_alarm_info(time, state_response)
             # check successful and give visual feedback
@@ -127,7 +133,8 @@ class RESTApiHandler:
                 self._broker.publish('alarm-info', alarm_info)
         else:
             # switch the alarm on
-            state_response = post(self._urls["url_state"], headers = self._headers, json = {"state": "on"})
+            state_response = post(
+                self._urls["url_state"], headers=self._headers, json={"state": "on"})
             # update the dictionary sent to the timekeeper
             alarm_info = self._format_alarm_info(time, state_response)
             # check successful and give visual feedback
@@ -150,7 +157,8 @@ class RESTApiHandler:
             get_logger(__name__).info(f'Initiate thread active')
         else:
             self._thread_flag = threading.Event()
-            self._thread = threading.Thread(target= self._http_polling, name = 'REST-API-Thread', daemon = True)
+            self._thread = threading.Thread(
+                target=self._http_polling, name='REST-API-Thread', daemon=True)
             self._thread.start()
             self._threadActive = True
             get_logger(__name__).info(f'Initiate thread inactive')
