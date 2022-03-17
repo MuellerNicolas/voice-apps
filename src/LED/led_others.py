@@ -9,6 +9,7 @@ class LEDOthers:
         # add broker
         self._broker = broker
         self._broker.subscribe('led-on', self._led_light)
+        self._broker.subscribe('led-mute', self._led_mute)
         self._broker.subscribe('led-rainbow', self._led_rainbow)
         self._broker.subscribe('led-off', self.close)
 
@@ -22,6 +23,13 @@ class LEDOthers:
             sleep(5)
             led.set('white')
             sleep(180)
+        finally:
+            led.set('black')
+
+    def _led_mute(self):
+        try:
+            led.set("red")
+            sleep(5)
         finally:
             led.set('black')
 

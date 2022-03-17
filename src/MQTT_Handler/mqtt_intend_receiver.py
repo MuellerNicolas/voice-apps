@@ -52,6 +52,9 @@ class MQTTIntendReceiver(mqtt.Client):
 
     def _broker_notify_led_off(self, mosq, obj, msg):
         self._broker.publish('led-off')
+        
+    def _broker_notify_led_mute(self, mosq, obj, msg):
+        self._broker.publish('led-mute')
 
     def _broker_notify_get_alarm_state(self, mosq, obj, msg):
         self._broker.publish('trigger-button-alarm-info')
@@ -104,6 +107,9 @@ class MQTTIntendReceiver(mqtt.Client):
             # turn led off
             self.message_callback_add(
                 'hermes/intent/LedOff', self._broker_notify_led_off)
+            # led mute
+            self.message_callback_add(
+                'voice-apps/led/mute', self._broker_notify_led_mute)
             # get alarm status
             self.message_callback_add(
                 'hermes/intent/AlarmState', self._broker_notify_get_alarm_state)
