@@ -26,7 +26,7 @@ if __name__ == "__main__":
         # Alarm sound - PIN-SONG = Passive Buzzer / PIN_BEEP = Active Buzzer
         AlarmSound(broker, PIN_SONG=6, PIN_BEEP=4),
         AlarmStopButton(broker, PIN=0, POLLING=.125),      # Button - stop
-        AlarmInfoButton(broker, PIN=2, POLLING=.125),      # Button - info
+        #AlarmInfoButton(broker, PIN=2, POLLING=.125),      # Button - info
         # AlarmSwitchButton(broker, PIN=2, POLLING=.125),    # Button - switch
         LEDClock(broker, 0, "blue", "red", "yellow"),      # LED Clock
         # LED alarm status on switch

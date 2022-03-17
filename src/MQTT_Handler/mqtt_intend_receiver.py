@@ -64,8 +64,15 @@ class MQTTIntendReceiver(mqtt.Client):
 
     # Active Hotword
     def _unmute(self, *args, **kwargs):
+        # Start listening again
         topic = "hermes/hotword/toggleOn"
         payload = '{"siteId": "default", "reason": ""}'
+        qos = 0
+        retain = False
+        self.publish(topic, payload=payload, qos=qos, retain=retain)
+        # Enable Hermes LED Control again
+        topic = "hermes/leds/toggleOn"
+        payload = '{"siteId" : "default"}'
         qos = 0
         retain = False
         self.publish(topic, payload=payload, qos=qos, retain=retain)
