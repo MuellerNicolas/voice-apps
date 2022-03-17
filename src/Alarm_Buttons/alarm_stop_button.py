@@ -28,6 +28,7 @@ class AlarmStopButton(AlarmStopButtonInterface):
         self._thread_button_flag.set()
 
     def _triggered(self):
+        get_logger(__name__).info(f'alarm-button-stop fired!')
         # notify all interested compontents about the event
         self._broker.publish('alarm-button-stop', 'pressed')
 

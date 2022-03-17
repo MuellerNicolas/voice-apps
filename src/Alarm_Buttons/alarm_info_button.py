@@ -40,6 +40,7 @@ class AlarmInfoButton:
         self._thread_button_flag.set()
 
     def _triggered(self):
+        get_logger(__name__).info(f'alarm-button-info fired!')
         if not(self.alarm_info_received):
             self._broker.publish('alarm-request-info')
             timestamp = time()
