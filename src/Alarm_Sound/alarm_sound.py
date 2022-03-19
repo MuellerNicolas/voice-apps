@@ -3,6 +3,7 @@ import threading
 from time import sleep
 
 from matrix_lite import gpio
+from Alarm_Sound.alarm_beep import AlarmBeep
 
 from Alarm_Sound.alarm_song import BuzzerSong
 from Logger.logger_init import get_logger
@@ -21,17 +22,17 @@ class AlarmSound:
         self._broker.subscribe("alarm-song-selected",
                                self._select_alarm_song_cb)
         self._thread_buzzer_flag = None
-        # flag to stop the sound
-        self._continue_beep = True
         # flag for timeout if the buzzer is already active
         self._last_minute_active = False
         # Pin Belegung
         # Passive buzzer
         self._PIN_SONG = PIN_SONG
-        # Active Buzzer
+        # Passiver Buzzer lautes piepen
         self._PIN_BEEP = PIN_BEEP
-        # Passives Buzzer Objekt
-        self._passive_buzzer = None
+        # Passives Buzzer Objekt - Melodie
+        self._passive_buzzer_melody = None
+        # Passives Buzzer Objekt - beep
+        self._passive_buzzer_beep = None
         # Default: no Song
         self._selected_song = 'Aus'
 
@@ -44,8 +45,6 @@ class AlarmSound:
     def close(self):
         if self._thread_buzzer_flag != None:
             self._thread_buzzer_flag.set()
-        if self._continue_beep == True:
-            self._continue_beep = False
         # Make sure there is no power on the pin after closing
         gpio.setDigital(self._PIN_BEEP, 'OFF')
         gpio.setDigital(self._PIN_SONG, 'OFF')
@@ -56,15 +55,15 @@ class AlarmSound:
         self._selected_song = song
 
     def _melody(self):
-        # make sure the stop-flag is not accidently set
-        self._continue_beep = True
         # First try for the not so important song
         try:
+            # construct to set stop flag
+            self._passive_buzzer_beep = AlarmBeep(self._PIN_BEEP)
             # quiet song
-            self._passive_buzzer = BuzzerSong(self._PIN_SONG)
-            self._passive_buzzer.setup()
+            self._passive_buzzer_melody = BuzzerSong(self._PIN_SONG)
+            self._passive_buzzer_melody.setup()
             # start the selected song
-            self._passive_buzzer.select_song(self._selected_song)
+            self._passive_buzzer_melody.select_song(self._selected_song)
             get_logger(__name__).info(f'Passive Buzzer alarm was successful')
         except:
             get_logger(__name__).error(
@@ -75,27 +74,14 @@ class AlarmSound:
 
         # Second try in case the passive buzzer fails
         try:
-            # loud beeping
-            gpio.setFunction(self._PIN_BEEP, 'DIGITAL')
-            gpio.setMode(self._PIN_BEEP, 'output')
-            # each iteration takes 2 seconds and i want the alarm to continue
-            # straight for 5 minutes, after this time it should end automatically
-            for i in range(150):
-                # alarm was stopped
-                if(not self._continue_beep):
-                    break
-                gpio.setDigital(self._PIN_BEEP, 'ON')
-                sleep(1)
-                gpio.setDigital(self._PIN_BEEP, 'OFF')
-                sleep(1)
-            get_logger(__name__).info(f'Active Buzzer alarm was successful')
+            self._passive_buzzer_beep.play(melody=1000, tempo=4, pause=4)
+            get_logger(__name__).info(f'Passive Buzzer BEEP LOUD alarm was successful')
         except:
             get_logger(__name__).error(
-                f'Critical error in _melody @ activ buzzer')
-            logging.exception('Critical error in _melody @ activ buzzer')
+                f'Critical error in play @ AlarmBeep')
+            logging.exception('Critical error in play @ AlarmBeep')
         finally:
             # Reset the beep flag
-            self._continue_beep = True
             gpio.setDigital(self._PIN_BEEP, 'OFF')
             gpio.setDigital(self._PIN_SONG, 'OFF')
 
@@ -123,7 +109,8 @@ class AlarmSound:
     def _stopAlarm(self, *args, **kwargs):
         # interrupt the melody
         try:
-            self._passive_buzzer.set_stop_flag()
+            self._passive_buzzer_melody.set_stop_flag()
+            self._passive_buzzer_beep.set_stop_flag()
         except:
             pass
         # set all pins to low
