@@ -3,7 +3,7 @@ from time import sleep
 
 from matrix_lite import gpio
 
-class AlarmBeep:
+class PassiveAlarmBeep:
     def __init__(self, buzzer_pin):
         self._buzzer_pin = buzzer_pin
         self._stop_flag = False

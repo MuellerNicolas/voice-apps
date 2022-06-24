@@ -3,13 +3,14 @@ import threading
 from time import sleep
 
 from matrix_lite import gpio
-from Alarm_Sound.alarm_beep import AlarmBeep
 
+from Alarm_Sound.active_alarm_beep import ActiveAlarmBeep
 from Alarm_Sound.alarm_song import BuzzerSong
+
 from Logger.logger_init import get_logger
 
 
-class AlarmSound:
+class PassiveAlarmBeep:
     def __init__(self, broker, PIN_SONG, PIN_BEEP):
         self._broker = broker
         self._broker.subscribe("alarm-beep", self._beep)
@@ -27,19 +28,19 @@ class AlarmSound:
         # Pin Belegung
         # Passive buzzer
         self._PIN_SONG = PIN_SONG
-        # Passiver Buzzer lautes piepen
+        # Aktiver Buzzer lautes piepen
         self._PIN_BEEP = PIN_BEEP
         # Passives Buzzer Objekt - Melodie
         self._passive_buzzer_melody = None
-        # Passives Buzzer Objekt - beep
-        self._passive_buzzer_beep = None
+        # Aktives Buzzer Objekt - beep
+        self._active_buzzer_beep = None
         # Default: no Song
         self._selected_song = 'Aus'
 
     def _run(self):
         self._thread_buzzer_flag = threading.Event()
         self._thread_buzzer = threading.Thread(
-            target=self._melody, name='voice-app-alarm-sound-thread', daemon=True)
+            target=self._make_sound, name='voice-app-alarm-sound-thread', daemon=True)
         self._thread_buzzer.start()
 
     def close(self):
@@ -54,11 +55,11 @@ class AlarmSound:
         song = args[0]
         self._selected_song = song
 
-    def _melody(self):
+    def _make_sound(self):
         # First try for the not so important song
         try:
             # construct to set stop flag
-            self._passive_buzzer_beep = AlarmBeep(self._PIN_BEEP)
+            self._active_buzzer_beep = ActiveAlarmBeep(self._PIN_BEEP)
             # quiet song
             self._passive_buzzer_melody = BuzzerSong(self._PIN_SONG)
             self._passive_buzzer_melody.setup()
@@ -74,12 +75,12 @@ class AlarmSound:
 
         # Second try in case the passive buzzer fails
         try:
-            self._passive_buzzer_beep.play(melody=1000, tempo=4, pause=4)
-            get_logger(__name__).info(f'Passive Buzzer BEEP LOUD alarm was successful')
+            self._active_buzzer_beep.play(1, 90)
+            get_logger(__name__).info(f'Active Buzzer BEEP LOUD alarm was successful')
         except:
             get_logger(__name__).error(
-                f'Critical error in play @ AlarmBeep')
-            logging.exception('Critical error in play @ AlarmBeep')
+                f'Critical error in play @ ActiveAlarmBeep')
+            logging.exception('Critical error in play @ ActiveAlarmBeep')
         finally:
             # Reset the beep flag
             gpio.setDigital(self._PIN_BEEP, 'OFF')
@@ -110,7 +111,7 @@ class AlarmSound:
         # interrupt the melody
         try:
             self._passive_buzzer_melody.set_stop_flag()
-            self._passive_buzzer_beep.set_stop_flag()
+            self._active_buzzer_beep.set_stop_flag()
         except:
             pass
         # set all pins to low
