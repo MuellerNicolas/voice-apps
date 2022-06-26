@@ -10,7 +10,7 @@ from Alarm_Sound.alarm_song import BuzzerSong
 from Logger.logger_init import get_logger
 
 
-class PassiveAlarmBeep:
+class AlarmSound:
     def __init__(self, broker, PIN_SONG, PIN_BEEP):
         self._broker = broker
         self._broker.subscribe("alarm-beep", self._beep)
@@ -47,7 +47,7 @@ class PassiveAlarmBeep:
         if self._thread_buzzer_flag != None:
             self._thread_buzzer_flag.set()
         # Make sure there is no power on the pin after closing
-        gpio.setDigital(self._PIN_BEEP, 'OFF')
+        gpio.setDigital(self._PIN_BEEP, 'ON')
         gpio.setDigital(self._PIN_SONG, 'OFF')
 
     def _select_alarm_song_cb(self, *args, **kwargs):
@@ -83,7 +83,7 @@ class PassiveAlarmBeep:
             logging.exception('Critical error in play @ ActiveAlarmBeep')
         finally:
             # Reset the beep flag
-            gpio.setDigital(self._PIN_BEEP, 'OFF')
+            gpio.setDigital(self._PIN_BEEP, 'ON')
             gpio.setDigital(self._PIN_SONG, 'OFF')
 
         # display the time
