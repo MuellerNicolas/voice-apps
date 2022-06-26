@@ -37,9 +37,12 @@ class AlarmStopButton(AlarmStopButtonInterface):
             while True:
                 sleep(self._POLLING)
                 if (gpio.getDigital(self._PIN)) == 1:
-                    # notify all interested compontents about the event
-                    self._triggered()
-                    # debouncetime - 1 second: ignore any buttonpress within the next second
+                    # accept only a long press (prevent noisy signals from the buzzer due to the magnetic field)
                     sleep(1)
+                    if (gpio.getDigital(self._PIN)) == 1:
+                        # notify all interested compontents about the event
+                        self._triggered()
+                        # debouncetime - 1 second: ignore any buttonpress within the next second
+                        sleep(1)
         except:
             get_logger(__name__).error(f'Error in Thread Stop Button')

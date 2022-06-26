@@ -53,15 +53,18 @@ class AlarmInfoButton:
             while True:
                 sleep(self._POLLING)
                 if (gpio.getDigital(self._PIN)) == 1:
-                    self._triggered()
-                    # debouncetime - 15 second: ignore any buttonpress within the next second
-                    # notify all interested compontents about the event
-                    # set to 15 seconds, because the leds will last 15 seconds
-                    # otherwise multiple presses after one another will cause a strange
-                    # led effect
-                    if(self.alarm_info_received):
-                        self._broker.publish('alarm-button-info', 'pressed')
-                    sleep(15)
+                    # accept only a long press (prevent noisy signals from the buzzer due to the magnetic field)
+                    sleep(1)
+                    if (gpio.getDigital(self._PIN)) == 1:
+                        self._triggered()
+                        # debouncetime - 15 second: ignore any buttonpress within the next second
+                        # notify all interested compontents about the event
+                        # set to 15 seconds, because the leds will last 15 seconds
+                        # otherwise multiple presses after one another will cause a strange
+                        # led effect
+                        if(self.alarm_info_received):
+                            self._broker.publish('alarm-button-info', 'pressed')
+                        sleep(15)
         except:
             get_logger(__name__).error(f'Error in Thread Info Button')
         finally:
