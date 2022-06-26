@@ -218,3 +218,4 @@ warning.log
 /home/pi/voice-apps/src/Logger/warning.log
 # End of https://www.gitignore.io/api/python,pycharm,visualstudiocode
 
+*-buzzer-test.py
