@@ -1,6 +1,10 @@
 {
   "authorization": "Bearer... / Additional info: https://developers.home-assistant.io/docs/external_api_rest/",
-  "url_time": "http://YOUR_IP_ADRESS:8123/api/states/input_datetime.alarm_time",
-  "url_state": "http://YOUR_IP_ADRESS:8123/api/states/input_boolean.alarm_wakeup",
-  "url_song": "http://YOUR_IP_ADRESS.21:8123/api/states/input_select.alarm_songs"
+  "url_is_workday": "http://YOUR_IP_ADRESS:8123/api/states/binary_sensor.workday_sensor",
+  "url_time_workday": "http://YOUR_IP_ADRESS:8123/api/states/input_datetime.alarm_clock_workingday",
+  "url_time_weekend": "http://YOUR_IP_ADRESS:8123/api/states/input_datetime.alarm_clock_weekend",
+  "url_state_workday": "http://YOUR_IP_ADRESS:8123/api/states/input_boolean.alarm_clock_status_workingday",
+  "url_state_weekend": "http://YOUR_IP_ADRESS:8123/api/states/input_boolean.alarm_clock_status_weekend",
+  "url_song_workday": "http://YOUR_IP_ADRESS:8123/api/states/input_select.alarm_clock_songs_workingday",
+  "url_song_weekend": "http://YOUR_IP_ADRESS:8123/api/states/input_select.alarm_clock_songs_weekend"
 }

@@ -191,7 +191,41 @@ class BuzzerSong:
             self.playFinalCountdown()
 
     def playNothing(self):
-        pass
+        aus_melody = [
+            notes['C4'], 0, notes['D4'], 0,
+            notes['E4'], 0, notes['F4'], 0,
+            notes['G4'], 0, notes['A4'], 0,
+            notes['B4'], 0, notes['C5'], 0,
+            notes['D5'], 0, notes['E5'], 0,
+            notes['F5'], 0, notes['G5'], 0,
+            notes['A5'], 0, notes['B5'], 0,
+            notes['C6'], 0, notes['D6'], 0,
+            notes['E6'], 0, notes['F6'], 0,
+            notes['G6'], 0, notes['A6'], 0,
+            notes['B6'], 0, notes['C6'], 0,
+            notes['D6'], 0, notes['E6'], 0,
+            notes['F6'], 0, notes['G6'], 0,
+            notes['A6'], 0, notes['B6'], 0,
+        ]
+
+        aus_tempo = [
+            4, 2, 4, 2,
+            4, 2, 4, 2,
+            4, 2, 4, 2,
+            4, 3, 4, 3,
+            4, 3, 4, 3,
+            6, 4, 6, 6,
+            6, 4, 6, 6,
+            6, 4, 6, 6,
+            6, 4, 6, 6,
+            6, 4, 6, 6,
+            6, 4, 6, 6,
+            6, 4, 6, 4,
+            6, 4, 6, 4,
+            6, 4, 6, 4,
+            6, 4, 6, 4,
+        ]
+        self.play(aus_melody, aus_tempo, 1, 1)
 
     def playSuperMario(self):
         melody = [
@@ -331,14 +365,14 @@ class BuzzerSong:
 
         underworld_tempo = [
             12, 12, 12, 12,
-            12, 12, 6,
-            3,
+            12, 12, 1,
+            1,
             12, 12, 12, 12,
-            12, 12, 6,
-            3,
+            12, 12, 1,
+            1,
             12, 12, 12, 12,
-            12, 12, 6,
-            3,
+            12, 12, 2,
+            2,
             12, 12, 12, 12,
             12, 12, 6,
             6, 18, 18, 18,

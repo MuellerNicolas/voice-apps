@@ -26,15 +26,18 @@ class RESTApiHandler:
             "content-type": "application/json"
         }
         self._urls = {
-            "url_time": home_assistant['url_time'],
-            "url_state": home_assistant['url_state'],
-            "url_song": home_assistant['url_song']
+            "url_is_workday": home_assistant['url_is_workday'],
+            "url_time_workday": home_assistant['url_time_workday'],
+            "url_time_weekend": home_assistant['url_time_weekend'],
+            "url_state_workday": home_assistant['url_state_workday'],
+            "url_state_weekend": home_assistant['url_state_weekend'],
+            "url_song_workday": home_assistant['url_song_workday'],
+            "url_song_weekend": home_assistant['url_song_weekend']
         }
         # Broker
         self._broker = broker
         self._broker.subscribe("alarm-request-info",
                                self._initiate_request_callback)
-        self._broker.subscribe("alarm-button-switch", self._set_alarm_state)
 
         # Thread
         self._threadActive = False
@@ -51,9 +54,20 @@ class RESTApiHandler:
             sleep(10)
             while True:
                 get_logger(__name__).info(f'http api try')
-                time = self._get_alarm_time()
-                state = self._get_alarm_state()
-                song = self._get_alarm_song()
+                
+                is_workday = self._get_is_workday()
+                
+                if(is_workday):
+                    get_logger(__name__).info(f'today is a workday')
+                    time = self._get_alarm_time_workday()
+                    state = self._get_alarm_state_workday()
+                    song = self._get_alarm_song_workday()
+                else:
+                    get_logger(__name__).info(f'today is a weekend day')
+                    time = self._get_alarm_time_weekend()
+                    state = self._get_alarm_state_weekend()
+                    song = self._get_alarm_song_weekend()
+                
                 # Don't check if song request was successful,
                 # because the alarm will work without it
                 # Check if the request was successful
@@ -84,17 +98,26 @@ class RESTApiHandler:
             self.close()
             self._threadActive = False
 
-    def _get_alarm_time(self):
-        time = get(self._urls["url_time"], headers=self._headers)
-        return time
+    def _get_is_workday(self):
+        return get(self._urls["url_is_workday"], headers=self._headers)
+    
+    def _get_alarm_time_workday(self):
+        return get(self._urls["url_time_workday"], headers=self._headers)
 
-    def _get_alarm_state(self):
-        state = get(self._urls["url_state"], headers=self._headers)
-        return state
+    def _get_alarm_state_workday(self):
+        return get(self._urls["url_state_workday"], headers=self._headers)
 
-    def _get_alarm_song(self):
-        song = get(self._urls["url_song"], headers=self._headers)
-        return song
+    def _get_alarm_song_workday(self):
+        return get(self._urls["url_song_workday"], headers=self._headers)
+
+    def _get_alarm_time_weekend(self):
+        return get(self._urls["url_time_weekend"], headers=self._headers)
+
+    def _get_alarm_state_weekend(self):
+        return get(self._urls["url_state_weekend"], headers=self._headers)
+
+    def _get_alarm_song_weekend(self):
+        return get(self._urls["url_song_weekend"], headers=self._headers)
 
     def _format_alarm_song(self, song):
         song = song.json()
@@ -111,45 +134,6 @@ class RESTApiHandler:
         state = state.json()
         alarm_info["state"] = state["state"]
         return alarm_info
-
-    def _set_alarm_state(self, info):
-        # execute on alarm-switch-button push
-        time = self._get_alarm_time()
-        state = self._get_alarm_state()
-        alarm_info = self._format_alarm_info(time, state)
-        # Switch alarm state
-        if(alarm_info["state"] == "on"):
-            # switch the alarm off
-            state_response = post(
-                self._urls["url_state"], headers=self._headers, json={"state": "off"})
-            # update the dictionary sent to the timekeeper
-            alarm_info = self._format_alarm_info(time, state_response)
-            # check successful and give visual feedback
-            if(state_response.status_code != 200):
-                self._broker.publish('alarm-switch-led', 'fail')
-            else:
-                self._broker.publish('alarm-switch-led', 'off')
-                # send the new alarm info to the time keeper
-                self._broker.publish('alarm-info', alarm_info)
-        else:
-            # switch the alarm on
-            state_response = post(
-                self._urls["url_state"], headers=self._headers, json={"state": "on"})
-            # update the dictionary sent to the timekeeper
-            alarm_info = self._format_alarm_info(time, state_response)
-            # check successful and give visual feedback
-            if(state_response.status_code != 200):
-                self._broker.publish('alarm-switch-led', 'fail')
-            else:
-                self._broker.publish('alarm-switch-led', 'on')
-                # send the new alarm info to the time keeper
-                self._broker.publish('alarm-info', alarm_info)
-        # refresh the selected song
-        song = self._get_alarm_song()
-        # Send the selected song, if the request was successful
-        if(song.status_code == 200):
-            alarm_song = self._format_alarm_song(song)
-            self._broker.publish('alarm-song-selected', alarm_song)
 
     def _initiate_request_callback(self):
         if(self._threadActive):

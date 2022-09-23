@@ -36,12 +36,13 @@ class AlarmTimeKeeper:
                     self._initiateApiGet()
                     # if no infos received wake me up at 6:00 am
                     if(hour == 6 and minute == 0):
+                        get_logger(__name__).warn(f'Wake up at 6:00 am. Current alarm_info={self._alarm_info}')
                         self._alarmClockWakeup()
                 elif(self._alarm_info["state"] == "on"):
                     if(hour == self._alarm_info["hour"] and minute == self._alarm_info["minute"]):
                         self._alarmClockWakeup()
                 # Polling rate
-                sleep(45)
+                sleep(15)
         except:
             get_logger(__name__).error(f'Error while time polling')
             logging.exception("error info: ")
