@@ -75,7 +75,7 @@ class AlarmSound:
 
         # Second try in case the passive buzzer fails
         try:
-            self._active_buzzer_beep.play(1, 90)
+            self._active_buzzer_beep.play(2, 90)
             get_logger(__name__).info(f'Active Buzzer BEEP LOUD alarm was successful')
         except:
             get_logger(__name__).error(
