@@ -32,7 +32,7 @@ if __name__ == "__main__":
         # LED other stuff like lights or rainbow
         LEDOthers(broker),
         # REST-API-Handler for Home Assistant
-        RESTApiHandler(broker),
+        #RESTApiHandler(broker),
         AlarmTimeKeeper(broker),                           # Time Keeper
         # MQTT Receiver from Home Assistant
         MQTTHomeAssistantReceiver(broker),

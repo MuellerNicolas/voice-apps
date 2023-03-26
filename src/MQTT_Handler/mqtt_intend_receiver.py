@@ -126,5 +126,5 @@ class MQTTIntendReceiver(mqtt.Client):
                 error = self.loop()
             return error
         finally:
-            get_logger(__name__).info(f'error in mqtt receiver rc = {error}')
+            get_logger(__name__).warn(f'error in mqtt receiver rc = {error}')
             logging.exception("error info: ")
