@@ -1,0 +1,6 @@
+{
+    "ip": "192.168.178.xx",
+    "port": 1883,
+    "user": "INSERT-USERNAME-HERE",
+    "password": "INSERT-PASSWORD-HERE"
+}

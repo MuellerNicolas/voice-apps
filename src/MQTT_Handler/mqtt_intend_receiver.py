@@ -19,6 +19,8 @@ class MQTTIntendReceiver(mqtt.Client):
                             'mqtt_intend_settings.json')
         with open(path) as f:
             mqtt_settings = json.load(f)
+        self._user = mqtt_settings["user"]
+        self._password = mqtt_settings["password"]
         self._ip_adress = mqtt_settings["ip"]   # usually 192.168.178.19
         self._port = mqtt_settings["port"]  # usually 1883
         # setup logging
@@ -79,52 +81,54 @@ class MQTTIntendReceiver(mqtt.Client):
         qos = 0
         retain = False
         self.publish(topic, payload=payload, qos=qos, retain=retain)
+        
+    def on_disconnect(self, userdata, rc, properties):
+        # error (bzw. rc) zeigt den Status des Verbindungsverlustes an
+        # returned error > 0 dann ist ein Fehler aufgtreten
+        if rc != 0:
+            get_logger(__name__).warn(f'error in mqtt receiver rc = {rc}')
+            get_logger(__name__).warn(f'Unexpected MQTT disconnection. Will auto-reconnect')
+            
+    def on_connect(self, userdata, flags, rc, properties):
+        get_logger(__name__).info(f'connected to mqtt broker on {self._ip_adress}:{self._port}')
+        
+        # Subscribe to all topics
+        self.subscribe('#')
+        """
+            !!!Attention!!!
+            Adapt the wake word topic to your specific wake word topic, which may vary 
+            by wake word engine and your country
+        """
+        # Wakeword
+        self.message_callback_add(
+            'hermes/hotword/+/detected', self._broker_notify_wakeword)
+        # Time app
+        self.message_callback_add(
+            'hermes/intent/GetTime', self._broker_notify_show_time)
+        # light leds
+        self.message_callback_add(
+            'hermes/intent/LedOn', self._broker_notify_led_on)
+        # led rainbow
+        self.message_callback_add(
+            'hermes/intent/LedRainbow', self._broker_notify_led_rainbow)
+        # turn led off
+        self.message_callback_add(
+            'hermes/intent/LedOff', self._broker_notify_led_off)
+        # led mute
+        self.message_callback_add(
+            'voice-apps/led/mute', self._broker_notify_led_mute)
+        # get alarm status
+        self.message_callback_add(
+            'hermes/intent/AlarmState', self._broker_notify_get_alarm_state)
+        # get alarm time
+        self.message_callback_add(
+            'hermes/intent/AlarmTime', self._broker_notify_get_alarm_time)
+        # get alarm info
+        self.message_callback_add(
+            'hermes/intent/AlarmInfo', self._broker_notify_get_alarm_time)
 
     def _run(self):
-        # ensure the mqtt-broker is already running
-        sleep(30)
-        try:
+            self.username_pw_set(self._user, self._password)
             self.connect(self._ip_adress, self._port)
-            # Subscribe to all topics
-            self.subscribe('#')
-            """
-                !!!Attention!!!
-                Adapt the wake word topic to your specific wake word topic, which may vary 
-                by wake word engine and your country
-            """
-            # Wakeword
-            self.message_callback_add(
-                'hermes/hotword/+/detected', self._broker_notify_wakeword)
-            # Time app
-            self.message_callback_add(
-                'hermes/intent/GetTime', self._broker_notify_show_time)
-            # light leds
-            self.message_callback_add(
-                'hermes/intent/LedOn', self._broker_notify_led_on)
-            # led rainbow
-            self.message_callback_add(
-                'hermes/intent/LedRainbow', self._broker_notify_led_rainbow)
-            # turn led off
-            self.message_callback_add(
-                'hermes/intent/LedOff', self._broker_notify_led_off)
-            # led mute
-            self.message_callback_add(
-                'voice-apps/led/mute', self._broker_notify_led_mute)
-            # get alarm status
-            self.message_callback_add(
-                'hermes/intent/AlarmState', self._broker_notify_get_alarm_state)
-            # get alarm time
-            self.message_callback_add(
-                'hermes/intent/AlarmTime', self._broker_notify_get_alarm_time)
-            # get alarm info
-            self.message_callback_add(
-                'hermes/intent/AlarmInfo', self._broker_notify_get_alarm_time)
-            # error (bzw. rc) zeigt den Status des Verbindungsverlustes an
-            # returned error > 0 dann ist ein Fehler aufgtreten
-            error = 0
-            while error == 0:
-                error = self.loop()
-            return error
-        finally:
-            get_logger(__name__).warn(f'error in mqtt receiver rc = {error}')
-            logging.exception("error info: ")
+            self.loop_forever(timeout=1.0)
+            
