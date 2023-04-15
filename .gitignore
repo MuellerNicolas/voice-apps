@@ -221,3 +221,4 @@ warning.log
 
 *-buzzer-test.py
 mqtt_intend_settings.json
+mqtt_home_assistant_settings.json

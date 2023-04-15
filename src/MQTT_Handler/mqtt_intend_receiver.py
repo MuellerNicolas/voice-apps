@@ -14,15 +14,15 @@ class MQTTIntendReceiver(mqtt.Client):
         self._broker = broker
         # Callback to active Hotword on button press
         self._broker.subscribe("alarm-button-stop", self._unmute)
-        # read mqtt setting 4 connection
+        # read mqtt setting for connection
         path = os.path.join(os.path.dirname(__file__),
                             'mqtt_intend_settings.json')
         with open(path) as f:
             mqtt_settings = json.load(f)
-        self._user = mqtt_settings["user"]
-        self._password = mqtt_settings["password"]
-        self._ip_adress = mqtt_settings["ip"]   # usually 192.168.178.19
-        self._port = mqtt_settings["port"]  # usually 1883
+        self._ip_adress = mqtt_settings.get("ip")  # usually 192.168.178.19
+        self._port = mqtt_settings.get("port")  # usually 1883
+        self._user = mqtt_settings.get("user")
+        self._password = mqtt_settings.get("password")
         # setup logging
         self.enable_logger(get_logger(__name__))
         # Thread zum empfangen der MQTT Nachrichten

@@ -12,20 +12,15 @@ class MQTTHomeAssistantReceiver(mqtt.Client):
     def __init__(self, broker):
         super().__init__()
         self._broker = broker
-        # read mqtt setting 4 connection
+        # read mqtt setting for connection
         path = os.path.join(os.path.dirname(__file__),
                             'mqtt_home_assistant_settings.json')
         with open(path) as f:
             mqtt_settings = json.load(f)
-        path = os.path.join(os.path.dirname(__file__),
-                            'MQTT_Home_Assistant_Authorization.json')
-        with open(path) as f:
-            mqtt_authorization = json.load(f)
-        self._ip_adress = mqtt_settings["ip"]   # usually 192.168.178.21
-        self._port = mqtt_settings["port"]  # usually 1883
-        self._user = mqtt_authorization["user"]
-        self._password = mqtt_authorization["password"]
-
+        self._ip_adress = mqtt_settings.get("ip")  # usually 192.168.178.19
+        self._port = mqtt_settings.get("port")  # usually 1883
+        self._user = mqtt_settings.get("user")
+        self._password = mqtt_settings.get("password")
         # setup logging
         self.enable_logger(get_logger(__name__))
         # Thread zum empfangen der MQTT Nachrichten
@@ -56,23 +51,25 @@ class MQTTHomeAssistantReceiver(mqtt.Client):
         get_logger(__name__).info(
             f'received & published the following alarm_infos={alarm_info}, alarm_song={alarm_song}')
 
+    def on_disconnect(self, userdata, rc, properties):
+        # error (bzw. rc) zeigt den Status des Verbindungsverlustes an
+        # returned error > 0 dann ist ein Fehler aufgtreten
+        if rc != 0:
+            get_logger(__name__).warn(f'error in mqtt receiver rc = {rc}')
+            get_logger(__name__).warn(f'Unexpected MQTT disconnection. Will auto-reconnect')
+
+    def on_connect(self, userdata, flags, rc, properties):
+        get_logger(__name__).info(f'connected to mqtt broker on {self._ip_adress}:{self._port}')
+        
+        # Subscribe to all topics
+        self.subscribe('#')
+
+        # Callback for Alarm Info
+        self.message_callback_add(
+            'home-assistant/alarm-clock/nicolas', self._broker_notify_alarm_info)
+
     def _run(self):
-        # ensure the mqtt-broker is already running
-        sleep(30)
-        try:
+        if self._user is not None and self._password is not None:
             self.username_pw_set(self._user, self._password)
-            self.connect(self._ip_adress, self._port)
-            # Subscribe to all topics
-            self.subscribe('#')
-            # Callback for Alarm Info
-            self.message_callback_add(
-                'home-assistant/alarm-clock/nicolas', self._broker_notify_alarm_info)
-            # error (bzw. rc) zeigt den Status des Verbindungsverlustes an
-            # returned error > 0 dann ist ein Fehler aufgtreten
-            error = 0
-            while error == 0:
-                error = self.loop()
-            return error
-        finally:
-            get_logger(__name__).info(f'error in mqtt receiver rc = {error}')
-            logging.exception("error info: ")
+        self.connect(self._ip_adress, self._port)
+        self.loop_forever(timeout=1.0)
