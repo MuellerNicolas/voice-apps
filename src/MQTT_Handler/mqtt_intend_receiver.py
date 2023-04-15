@@ -128,7 +128,8 @@ class MQTTIntendReceiver(mqtt.Client):
             'hermes/intent/AlarmInfo', self._broker_notify_get_alarm_time)
 
     def _run(self):
-            self.username_pw_set(self._user, self._password)
+            if self._user is not None and self._password is not None:
+                self.username_pw_set(self._user, self._password)
             self.connect(self._ip_adress, self._port)
             self.loop_forever(timeout=1.0)
             
