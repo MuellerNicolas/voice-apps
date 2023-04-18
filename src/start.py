@@ -22,6 +22,7 @@ if __name__ == "__main__":
     broker = Broker()
     # array including all components
     thread_objects = [
+        AlarmTimeKeeper(broker),                           # Time Keeper
         # Alarm sound - PIN-SONG = Passive Buzzer / PIN_BEEP = Active Buzzer
         AlarmSound(broker, PIN_SONG=6, PIN_BEEP=4),
         AlarmStopButton(broker, PIN=0, POLLING=.125),      # Button - stop
@@ -33,11 +34,10 @@ if __name__ == "__main__":
         LEDOthers(broker),
         # REST-API-Handler for Home Assistant
         #RESTApiHandler(broker),
-        AlarmTimeKeeper(broker),                           # Time Keeper
-        # MQTT Receiver from Home Assistant
-        MQTTHomeAssistantReceiver(broker),
         # MQTT Receiver from mqtt-Broker of Rhasspy
         MQTTIntendReceiver(broker),
+        # MQTT Receiver from Home Assistant
+        MQTTHomeAssistantReceiver(broker),
     ]
 
     try:

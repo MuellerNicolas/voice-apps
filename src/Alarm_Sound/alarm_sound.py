@@ -8,6 +8,7 @@ from Alarm_Sound.active_alarm_beep import ActiveAlarmBeep
 from Alarm_Sound.alarm_song import BuzzerSong
 
 from Logger.logger_init import get_logger
+import inspect
 
 
 class AlarmSound:
@@ -69,7 +70,6 @@ class AlarmSound:
         except:
             get_logger(__name__).error(
                 f'Critical error in _melody @ passiv buzzer')
-            logging.exception('Critical error in _melody @ passiv buzzer')
         finally:
             gpio.setDigital(self._PIN_SONG, 'OFF')
 
@@ -80,7 +80,6 @@ class AlarmSound:
         except:
             get_logger(__name__).error(
                 f'Critical error in play @ ActiveAlarmBeep')
-            logging.exception('Critical error in play @ ActiveAlarmBeep')
         finally:
             # Reset the beep flag
             gpio.setDigital(self._PIN_BEEP, 'ON')
@@ -92,27 +91,30 @@ class AlarmSound:
 
     def _beep(self, *args, **kwargs):
         if(self._last_minute_active == False):
-            # start beeping
-            self._run()
-            self._last_minute_active = True
-            """stop any request to start beeping for the next minute
-			   this is because the time keeper would send the whole 
-			   minute in 15 second intervals new command
-			"""
             try:
+                # start beeping
+                self._run()
+                self._last_minute_active = True
+                """stop any request to start beeping for the next minute
+                this is because the time keeper would send the whole 
+                minute in 15 second intervals new command
+                """
                 sleep(60)
-            except:
+            except Exception as e:
                 get_logger(__name__).warning(
-                    f'Interrupted debouncing of the buzzer')
+                    f'error in _beep: {e.with_traceback()}; stack trace: {inspect.stack()}')
             finally:
                 self._last_minute_active = False
+                self.close()
 
     def _stopAlarm(self, *args, **kwargs):
         # interrupt the melody
         try:
             self._passive_buzzer_melody.set_stop_flag()
             self._active_buzzer_beep.set_stop_flag()
-        except:
-            pass
-        # set all pins to low
-        self.close()
+        except Exception as e:
+            get_logger(__name__).error(
+                    f'stop alarm could not executed properly: {e.with_traceback()}; stack trace: {inspect.stack()}')
+        finally:
+            # set all pins to low
+            self.close()

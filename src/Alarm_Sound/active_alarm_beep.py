@@ -27,7 +27,7 @@ class ActiveAlarmBeep:
     def play(self, delay, repeat):
         for i in range(repeat):
             if self._stop_flag:
-                    return
+                return
             gpio.setDigital(self._buzzer_pin, 'OFF')
             time.sleep(delay)
             gpio.setDigital(self._buzzer_pin, 'ON')

@@ -69,6 +69,8 @@ class MQTTHomeAssistantReceiver(mqtt.Client):
             'home-assistant/alarm-clock/nicolas', self._broker_notify_alarm_info)
 
     def _run(self):
+        # make sure the listening service are ready yet
+        sleep(10)
         if self._user is not None and self._password is not None:
             self.username_pw_set(self._user, self._password)
         self.connect(self._ip_adress, self._port)

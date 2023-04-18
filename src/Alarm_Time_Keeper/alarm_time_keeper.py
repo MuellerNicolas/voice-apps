@@ -26,14 +26,15 @@ class AlarmTimeKeeper:
         self._thread_flag.clear()
 
     def _time_polling(self):
+        get_logger(__name__).info(f'start thread time polling')
         try:
-            sleep(120)
             while True:
                 hour = datetime.now().hour
                 minute = datetime.now().minute
                 if(self._alarm_info == None):
+                    get_logger(__name__).warn(f'No alarm infos received yet')
                     # if alarm infos were not received via mqtt, try get it via http
-                    self._initiateApiGet()
+                    #self._initiateApiGet()
                     # if no infos received wake me up at 6:00 am
                     if(hour == 6 and minute == 0):
                         get_logger(__name__).warn(f'Wake up at 6:00 am. Current alarm_info={self._alarm_info}')
@@ -45,7 +46,6 @@ class AlarmTimeKeeper:
                 sleep(15)
         except:
             get_logger(__name__).error(f'Error while time polling')
-            logging.exception("error info: ")
         finally:
             # if any error occurs try to wake me up
             # has to wait 10 sec, cuz the alarm_sound has to be initialized
