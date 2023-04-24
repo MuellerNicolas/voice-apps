@@ -10,7 +10,7 @@ from time import sleep
 
 class MQTTHomeAssistantReceiver(mqtt.Client):
     def __init__(self, broker):
-        super().__init__()
+        super().__init__(client_id='voice-apps')
         self._broker = broker
         # read mqtt setting for connection
         path = os.path.join(os.path.dirname(__file__),
@@ -59,14 +59,15 @@ class MQTTHomeAssistantReceiver(mqtt.Client):
             get_logger(__name__).warn(f'Unexpected MQTT disconnection. Will auto-reconnect')
 
     def on_connect(self, userdata, flags, rc, properties):
-        get_logger(__name__).info(f'connected to mqtt broker on {self._ip_adress}:{self._port}')
-        
-        # Subscribe to all topics
-        self.subscribe('#')
-
         # Callback for Alarm Info
         self.message_callback_add(
             'home-assistant/alarm-clock/nicolas', self._broker_notify_alarm_info)
+        # Subscribe to all topics
+        self.subscribe('#')
+        get_logger(__name__).info(f'connected to mqtt broker on {self._ip_adress}:{self._port}')
+    
+    def on_connect_fail(self, mqttc, userdata, rc):
+        get_logger(__name__).warn(f'failed to connect to mqtt broker on {self._ip_adress}:{self._port} with rc {rc}')
 
     def _run(self):
         # make sure the listening service are ready yet
@@ -74,4 +75,4 @@ class MQTTHomeAssistantReceiver(mqtt.Client):
         if self._user is not None and self._password is not None:
             self.username_pw_set(self._user, self._password)
         self.connect(self._ip_adress, self._port)
-        self.loop_forever(timeout=1.0)
+        self.loop_forever()

@@ -50,6 +50,7 @@ class AlarmTimeKeeper:
             # if any error occurs try to wake me up
             # has to wait 10 sec, cuz the alarm_sound has to be initialized
             sleep(10)
+            get_logger(__name__).error(f'Waking you up now, as an error occured in _time_polling')
             self._alarmClockWakeup()
 
     def _receive_alarm_info_callback(self, alarm_info):

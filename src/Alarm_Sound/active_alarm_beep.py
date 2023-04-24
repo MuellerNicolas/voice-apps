@@ -3,6 +3,10 @@ from time import sleep
 
 from matrix_lite import gpio
 
+class ActiveBuzzerUserInterrupt(Exception):
+    def __init__(self):
+        self.message = 'Active Buzzer was stopped by the user.'
+
 # Inverted Signal due to transistor
 # OFF - will cause a beep
 # ON  - will cause silence
@@ -27,7 +31,7 @@ class ActiveAlarmBeep:
     def play(self, delay, repeat):
         for i in range(repeat):
             if self._stop_flag:
-                return
+                raise ActiveBuzzerUserInterrupt()
             gpio.setDigital(self._buzzer_pin, 'OFF')
             time.sleep(delay)
             gpio.setDigital(self._buzzer_pin, 'ON')

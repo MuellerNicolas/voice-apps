@@ -43,6 +43,11 @@
 #
 # ---------------------------------------------------
 
+class PassiveBuzzerUserInterrupt(Exception):
+    def __init__(self):
+        self.message = 'Passive Buzzer SONG was stopped by the user.'
+
+
 import time
 from time import sleep
 
@@ -122,6 +127,7 @@ class BuzzerSong:
     def __init__(self, buzzer_pin):
         self._buzzer_pin = buzzer_pin
         self._stop_flag = False
+        self.setup()
 
     def set_stop_flag(self):
         self._stop_flag = True
@@ -156,7 +162,7 @@ class BuzzerSong:
 
         for i in range(0, len(melody)):		# Play song
             if self._stop_flag:
-                return
+                raise PassiveBuzzerUserInterrupt()
             noteDuration = pace/tempo[i]
             # Change the frequency along the song note
             self.buzz(melody[i], noteDuration)

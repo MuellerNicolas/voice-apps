@@ -3,6 +3,10 @@ from time import sleep
 
 from matrix_lite import gpio
 
+class PassiveBuzzerBeepUserInterrupt(Exception):
+    def __init__(self):
+        self.message = 'Passive Buzzer BEEP was stopped by the user.'
+
 class PassiveAlarmBeep:
     def __init__(self, buzzer_pin):
         self._buzzer_pin = buzzer_pin
@@ -23,7 +27,7 @@ class PassiveAlarmBeep:
     def play(self, melody, tempo, pause, pace=0.800):
             for i in range(200):
                 if self._stop_flag:
-                    return
+                    raise PassiveBuzzerBeepUserInterrupt()
                 noteDuration = pace/tempo
                 # Change the frequency along the song note
                 self.buzz(melody, noteDuration)

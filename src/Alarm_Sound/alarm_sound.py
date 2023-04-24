@@ -4,8 +4,8 @@ from time import sleep
 
 from matrix_lite import gpio
 
-from Alarm_Sound.active_alarm_beep import ActiveAlarmBeep
-from Alarm_Sound.alarm_song import BuzzerSong
+from Alarm_Sound.active_alarm_beep import ActiveAlarmBeep, ActiveBuzzerUserInterrupt
+from Alarm_Sound.alarm_song import BuzzerSong, PassiveBuzzerUserInterrupt
 
 from Logger.logger_init import get_logger
 import inspect
@@ -58,33 +58,27 @@ class AlarmSound:
 
     def _make_sound(self):
         # First try for the not so important song
+        self._passive_buzzer_melody = BuzzerSong(self._PIN_SONG)
+        self._active_buzzer_beep = ActiveAlarmBeep(self._PIN_BEEP)
+        
         try:
-            # construct to set stop flag
-            self._active_buzzer_beep = ActiveAlarmBeep(self._PIN_BEEP)
             # quiet song
-            self._passive_buzzer_melody = BuzzerSong(self._PIN_SONG)
-            self._passive_buzzer_melody.setup()
             # start the selected song
             self._passive_buzzer_melody.select_song(self._selected_song)
             get_logger(__name__).info(f'Passive Buzzer alarm was successful')
-        except:
-            get_logger(__name__).error(
-                f'Critical error in _melody @ passiv buzzer')
-        finally:
-            gpio.setDigital(self._PIN_SONG, 'OFF')
-
-        # Second try in case the passive buzzer fails
-        try:
             self._active_buzzer_beep.play(2, 90)
             get_logger(__name__).info(f'Active Buzzer BEEP LOUD alarm was successful')
-        except:
+        except ActiveBuzzerUserInterrupt as ActiveBuzzerException:
+            get_logger(__name__).info(f'Exception in _melody: {ActiveBuzzerException.message}')
+        except PassiveBuzzerUserInterrupt as PassiveBuzzerException:
+            get_logger(__name__).info(f'Exception in _melody: {PassiveBuzzerException.message}')
+        except Exception:
             get_logger(__name__).error(
-                f'Critical error in play @ ActiveAlarmBeep')
+                f'Critical error in _make_sound')
         finally:
             # Reset the beep flag
             gpio.setDigital(self._PIN_BEEP, 'ON')
             gpio.setDigital(self._PIN_SONG, 'OFF')
-
         # display the time
         sleep(5)
         self._broker.publish('alarm-button-stop', 'voice-triggered')
