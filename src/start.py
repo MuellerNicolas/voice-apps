@@ -53,12 +53,13 @@ if __name__ == "__main__":
 
     try:
         while(ACTIVE):
-            sleep(10)
+            sleep(0.1)
     except KeyboardInterrupt as e:
         get_logger(__name__).info(f'KeyboardInterrupt')
     except:
-        get_logger(__name__).info(f'Shutdown or Error')
-        logging.exception('Shutdown or Error!')
+        get_logger(__name__).info(f'Shutdown due to error')
+    finally:
+        ACTIVE = False
 
     # close / stop all threads
     for thread_object in thread_objects:
