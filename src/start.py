@@ -15,10 +15,13 @@ from MQTT_Handler.mqtt_intend_receiver import MQTTIntendReceiver
 from MQTT_Handler.mqtt_home_assistant_receiver import MQTTHomeAssistantReceiver
 from REST_API_Handler.rest_api_handler import RESTApiHandler
 
-def handleStop(_signum, frame):
+def terminateProgram():
     get_logger(__name__).info(f'received signal to stop')
     global ACTIVE
     ACTIVE = False
+    
+def handleStop(_signum, frame):
+    terminateProgram()
 
 if __name__ == "__main__":
     ACTIVE = True
@@ -46,14 +49,14 @@ if __name__ == "__main__":
         # REST-API-Handler for Home Assistant
         #RESTApiHandler(broker),
         # MQTT Receiver from mqtt-Broker of Rhasspy
-        MQTTIntendReceiver(broker),
+        MQTTIntendReceiver(broker, terminateProgram),
         # MQTT Receiver from Home Assistant
-        MQTTHomeAssistantReceiver(broker),
+        MQTTHomeAssistantReceiver(broker, terminateProgram),
     ]
 
     try:
         while(ACTIVE):
-            sleep(0.1)
+            sleep(10)
     except KeyboardInterrupt as e:
         get_logger(__name__).info(f'KeyboardInterrupt')
     except:

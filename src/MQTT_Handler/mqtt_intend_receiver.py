@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import threading
+import sys
 
 import paho.mqtt.client as mqtt
 from Logger.logger_init import get_logger
@@ -9,9 +10,10 @@ from time import sleep
 
 
 class MQTTIntendReceiver(mqtt.Client):
-    def __init__(self, broker):
+    def __init__(self, broker, terminateProgram):
         super().__init__()
         self._broker = broker
+        self._terminateProgram = terminateProgram
         # Callback to active Hotword on button press
         self._broker.subscribe("alarm-button-stop", self._unmute)
         # read mqtt setting for connection
@@ -128,8 +130,12 @@ class MQTTIntendReceiver(mqtt.Client):
             'hermes/intent/AlarmInfo', self._broker_notify_get_alarm_time)
 
     def _run(self):
+        try:
             if self._user is not None and self._password is not None:
                 self.username_pw_set(self._user, self._password)
             self.connect(self._ip_adress, self._port)
             self.loop_forever(timeout=1.0)
+        except:
+            get_logger(__name__).info(f'Failed to connect mqtt to {self._ip_adress}:{self._port}')
+            self._terminateProgram()
             

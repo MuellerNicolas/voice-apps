@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import threading
+import sys
 
 import paho.mqtt.client as mqtt
 from Logger.logger_init import get_logger
@@ -9,9 +10,10 @@ from time import sleep
 
 
 class MQTTHomeAssistantReceiver(mqtt.Client):
-    def __init__(self, broker):
+    def __init__(self, broker, terminateProgram):
         super().__init__(client_id='voice-apps')
         self._broker = broker
+        self._terminateProgram = terminateProgram
         # read mqtt setting for connection
         path = os.path.join(os.path.dirname(__file__),
                             'mqtt_home_assistant_settings.json')
@@ -70,9 +72,13 @@ class MQTTHomeAssistantReceiver(mqtt.Client):
         get_logger(__name__).warn(f'failed to connect to mqtt broker on {self._ip_adress}:{self._port} with rc {rc}')
 
     def _run(self):
-        # make sure the listening service are ready yet
-        sleep(10)
-        if self._user is not None and self._password is not None:
-            self.username_pw_set(self._user, self._password)
-        self.connect(self._ip_adress, self._port)
-        self.loop_forever()
+        try:
+            # make sure the listening service are ready yet
+            sleep(10)
+            if self._user is not None and self._password is not None:
+                self.username_pw_set(self._user, self._password)
+            self.connect(self._ip_adress, self._port)
+            self.loop_forever()
+        except Exception:
+            get_logger(__name__).info(f'Failed to connect mqtt to {self._ip_adress}:{self._port}')
+            self._terminateProgram()
