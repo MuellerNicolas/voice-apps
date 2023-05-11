@@ -1,5 +1,6 @@
 import logging
 from time import sleep
+import signal
 
 from Alarm_Sound.alarm_sound import AlarmSound
 from Alarm_Buttons.alarm_stop_button import AlarmStopButton
@@ -14,7 +15,17 @@ from MQTT_Handler.mqtt_intend_receiver import MQTTIntendReceiver
 from MQTT_Handler.mqtt_home_assistant_receiver import MQTTHomeAssistantReceiver
 from REST_API_Handler.rest_api_handler import RESTApiHandler
 
+def handleStop(_signum, frame):
+    get_logger(__name__).info(f'received signal to stop')
+    global ACTIVE
+    ACTIVE = False
+
 if __name__ == "__main__":
+    ACTIVE = True
+    
+    signal.signal(signal.SIGTERM, handleStop)
+    signal.signal(signal.SIGINT, handleStop)
+ 
     # Setup logging
     setup_logging(default_filename='logging_config.json')
     get_logger(__name__).info(f'voice-apps started!')
@@ -41,7 +52,7 @@ if __name__ == "__main__":
     ]
 
     try:
-        while(True):
+        while(ACTIVE):
             sleep(10)
     except KeyboardInterrupt as e:
         get_logger(__name__).info(f'KeyboardInterrupt')

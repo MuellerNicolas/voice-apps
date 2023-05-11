@@ -37,6 +37,9 @@ class AlarmSound:
         self._active_buzzer_beep = None
         # Default: no Song
         self._selected_song = 'Aus'
+        
+        self._passive_buzzer_melody = BuzzerSong(self._PIN_SONG)
+        self._active_buzzer_beep = ActiveAlarmBeep(self._PIN_BEEP)
 
     def _run(self):
         self._thread_buzzer_flag = threading.Event()
@@ -57,10 +60,6 @@ class AlarmSound:
         self._selected_song = song
 
     def _make_sound(self):
-        # First try for the not so important song
-        self._passive_buzzer_melody = BuzzerSong(self._PIN_SONG)
-        self._active_buzzer_beep = ActiveAlarmBeep(self._PIN_BEEP)
-        
         try:
             # quiet song
             # start the selected song
@@ -95,8 +94,8 @@ class AlarmSound:
                 """
                 sleep(60)
             except Exception as e:
-                get_logger(__name__).warning(
-                    f'error in _beep: {e.with_traceback()}; stack trace: {inspect.stack()}')
+                get_logger(__name__).warning(f'error in _beep:')
+                get_logger(__name__).error(e, exc_info=True)
             finally:
                 self._last_minute_active = False
                 self.close()
@@ -104,11 +103,13 @@ class AlarmSound:
     def _stopAlarm(self, *args, **kwargs):
         # interrupt the melody
         try:
-            self._passive_buzzer_melody.set_stop_flag()
-            self._active_buzzer_beep.set_stop_flag()
+            if(self._passive_buzzer_melody):
+                self._passive_buzzer_melody.set_stop_flag()
+            if(self._active_buzzer_beep):
+                self._active_buzzer_beep.set_stop_flag()
         except Exception as e:
-            get_logger(__name__).error(
-                    f'stop alarm could not executed properly: {e.with_traceback()}; stack trace: {inspect.stack()}')
+            get_logger(__name__).error(f'stop alarm could not executed properly:')
+            get_logger(__name__).error(e, exc_info=True)
         finally:
             # set all pins to low
             self.close()
