@@ -77,7 +77,6 @@ class MQTTHomeAssistantReceiver(mqtt.Client):
             if self._user is not None and self._password is not None:
                 self.username_pw_set(self._user, self._password)
             self.connect(self._ip_adress, self._port)
-            raise Exception('whoops')
             self.loop_forever()
         except Exception as e:
             get_logger(__name__).error(f'Failed to connect mqtt to {self._ip_adress}:{self._port}')
