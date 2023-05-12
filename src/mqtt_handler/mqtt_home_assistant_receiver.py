@@ -29,9 +29,9 @@ class MQTTHomeAssistantReceiver(mqtt.Client):
         self._thread.start()
 
     def close(self):
-        self._thread_flag.set()
         get_logger(__name__).info(f'disconnect from mqtt broker on {self._ip_adress}:{self._port}')
         self.disconnect()
+        self._thread_flag.set()
 
     # for msg: msg.topic, msg.qos, msg.payload
     # any message which did not match the special callbacks
