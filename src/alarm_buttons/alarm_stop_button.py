@@ -4,9 +4,8 @@ from time import sleep
 
 from matrix_lite import gpio
 
-from Alarm_Buttons.alarm_stop_button_interface import \
-    AlarmStopButtonInterface
-from Logger.logger_init import get_logger
+from alarm_buttons.alarm_stop_button_interface import AlarmStopButtonInterface
+from logger.logger_init import get_logger
 
 
 class AlarmStopButton(AlarmStopButtonInterface):

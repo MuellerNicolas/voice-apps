@@ -4,7 +4,7 @@ import os
 import threading
 from time import sleep
 
-from Logger.logger_init import get_logger
+from logger.logger_init import get_logger
 from requests import get, post
 
 

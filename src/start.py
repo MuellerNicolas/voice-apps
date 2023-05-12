@@ -1,27 +1,37 @@
-import logging
 from time import sleep
 import signal
 
-from Alarm_Sound.alarm_sound import AlarmSound
-from Alarm_Buttons.alarm_stop_button import AlarmStopButton
-from Alarm_Buttons.alarm_info_button import AlarmInfoButton
-from Alarm_Time_Keeper.alarm_time_keeper import AlarmTimeKeeper
-from Broker.broker import Broker
-from LED.led_alarm_status import LEDAlarmStatus
-from LED.led_clock import LEDClock
-from LED.led_others import LEDOthers
-from Logger.logger_init import get_logger, setup_logging
-from MQTT_Handler.mqtt_intend_receiver import MQTTIntendReceiver
-from MQTT_Handler.mqtt_home_assistant_receiver import MQTTHomeAssistantReceiver
-from REST_API_Handler.rest_api_handler import RESTApiHandler
+from alarm_sound.alarm_sound import AlarmSound
+from alarm_buttons.alarm_stop_button import AlarmStopButton
+from alarm_buttons.alarm_info_button import AlarmInfoButton
+from alarm_time_keeper.alarm_time_keeper import AlarmTimeKeeper
+from broker.broker import Broker
+from led.led_alarm_status import LEDAlarmStatus
+from led.led_clock import LEDClock
+from led.led_others import LEDOthers
+from logger.logger_init import get_logger, setup_logging
+from mqtt_handler.mqtt_intend_receiver import MQTTIntendReceiver
+from mqtt_handler.mqtt_home_assistant_receiver import MQTTHomeAssistantReceiver
+from rest_api_handler.rest_api_handler import RESTApiHandler
 
-def terminateProgram():
+thread_objects = []
+
+def handleStop(_signum, frame):
     get_logger(__name__).info(f'received signal to stop')
     global ACTIVE
     ACTIVE = False
-    
-def handleStop(_signum, frame):
-    terminateProgram()
+
+# used to recreate the MQTT Handlers as sometimes no connection to the mqtt is established
+def recreateMqttHandler(mqttHandler):
+    if isinstance(mqttHandler, MQTTIntendReceiver):
+        get_logger(__name__).info(f'MQTTIntendReceiver recreated!')
+        thread_objects.remove(mqttHandler)
+        thread_objects.append(MQTTIntendReceiver(broker, recreateMqttHandler))
+    elif isinstance(mqttHandler, MQTTHomeAssistantReceiver):
+        get_logger(__name__).info(f'MQTTHomeAssistantReceiver recreated!')
+        thread_objects.remove(mqttHandler)
+        thread_objects.append(MQTTHomeAssistantReceiver(broker, recreateMqttHandler))
+
 
 if __name__ == "__main__":
     ACTIVE = True
@@ -35,7 +45,7 @@ if __name__ == "__main__":
     # Central broker
     broker = Broker()
     # array including all components
-    thread_objects = [
+    thread_objects.extend([
         AlarmTimeKeeper(broker),                           # Time Keeper
         # Alarm sound - PIN-SONG = Passive Buzzer / PIN_BEEP = Active Buzzer
         AlarmSound(broker, PIN_SONG=6, PIN_BEEP=4),
@@ -49,10 +59,10 @@ if __name__ == "__main__":
         # REST-API-Handler for Home Assistant
         #RESTApiHandler(broker),
         # MQTT Receiver from mqtt-Broker of Rhasspy
-        MQTTIntendReceiver(broker, terminateProgram),
+        MQTTIntendReceiver(broker, recreateMqttHandler),
         # MQTT Receiver from Home Assistant
-        MQTTHomeAssistantReceiver(broker, terminateProgram),
-    ]
+        MQTTHomeAssistantReceiver(broker, recreateMqttHandler),
+    ])
 
     try:
         while(ACTIVE):

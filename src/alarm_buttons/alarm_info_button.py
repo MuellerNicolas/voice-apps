@@ -3,7 +3,7 @@ from time import sleep, time
 
 from matrix_lite import gpio
 
-from Logger.logger_init import get_logger
+from logger.logger_init import get_logger
 
 
 class AlarmInfoButton:

@@ -5,7 +5,7 @@ import threading
 import sys
 
 import paho.mqtt.client as mqtt
-from Logger.logger_init import get_logger
+from logger.logger_init import get_logger
 from time import sleep
 
 
@@ -13,7 +13,7 @@ class MQTTIntendReceiver(mqtt.Client):
     def __init__(self, broker, terminateProgram):
         super().__init__()
         self._broker = broker
-        self._terminateProgram = terminateProgram
+        self._recreateSelf = terminateProgram
         # Callback to active Hotword on button press
         self._broker.subscribe("alarm-button-stop", self._unmute)
         # read mqtt setting for connection
@@ -34,6 +34,7 @@ class MQTTIntendReceiver(mqtt.Client):
 
     def close(self):
         self._thread_flag.set()
+        get_logger(__name__).info(f'disconnect from mqtt broker on {self._ip_adress}:{self._port}')
         self.disconnect()
 
     # for msg: msg.topic, msg.qos, msg.payload
@@ -135,7 +136,9 @@ class MQTTIntendReceiver(mqtt.Client):
                 self.username_pw_set(self._user, self._password)
             self.connect(self._ip_adress, self._port)
             self.loop_forever(timeout=1.0)
-        except:
-            get_logger(__name__).info(f'Failed to connect mqtt to {self._ip_adress}:{self._port}')
-            self._terminateProgram()
+        except Exception as e:
+            get_logger(__name__).error(f'Failed to connect mqtt to {self._ip_adress}:{self._port}')
+            get_logger(__name__).error(e, exc_info=True)
+            self.close()
+            self._recreateSelf(self)
             

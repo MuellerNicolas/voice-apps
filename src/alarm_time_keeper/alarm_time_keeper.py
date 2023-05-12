@@ -1,10 +1,8 @@
 import threading
-import logging
 from datetime import datetime
-from threading import Lock
 from time import sleep
 
-from Logger.logger_init import get_logger
+from logger.logger_init import get_logger
 
 
 class AlarmTimeKeeper:
