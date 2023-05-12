@@ -27,7 +27,7 @@ def setup_logging(default_filename):
     else:
         logging.basicConfig(level=logging.INFO)
         get_logger(__name__).warn(
-            "Config './Logger/logging_config.json' not found. Using standard logging settings ...")
+            "Config './logger/logging_config.json' not found. Using standard logging settings ...")
 
 
 def get_logger(module_name):
