@@ -99,6 +99,9 @@ class AlarmSound:
                 self.close()
 
     def _stopAlarm(self, *args, **kwargs):
+        # don't stop alarm when not beeping
+        if self._last_minute_active == False:
+            return
         # interrupt the melody
         try:
             if(self._passive_buzzer_melody):
