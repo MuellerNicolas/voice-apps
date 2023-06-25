@@ -96,6 +96,10 @@ class AlarmSound:
                 get_logger(__name__).error(e, exc_info=True)
             finally:
                 self._last_minute_active = False
+                # instanciate again, in case wakeword was triggered shortly after the alarm went off
+                # and _last_minute_active was still true
+                self._passive_buzzer_melody = BuzzerSong(self._PIN_SONG)
+                self._active_buzzer_beep = ActiveAlarmBeep(self._PIN_BEEP)
                 self.close()
 
     def _stopAlarm(self, *args, **kwargs):
