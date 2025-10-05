@@ -63,7 +63,7 @@ class AlarmSound:
             # start the selected song
             self._passive_buzzer_melody.select_song(self._selected_song)
             get_logger(__name__).info(f'Passive Buzzer alarm was successful')
-            self._active_buzzer_beep.play(2, 90)
+            self._active_buzzer_beep.play(2, 3)
             get_logger(__name__).info(f'Active Buzzer BEEP LOUD alarm was successful')
         except ActiveBuzzerUserInterrupt as ActiveBuzzerException:
             get_logger(__name__).info(f'Exception in _melody: {ActiveBuzzerException.message}')
